@@ -1,14 +1,26 @@
 #pragma once
 #include "IComponent.hpp"
 
-class HPComponent : public IComponent 
+namespace sw::engine
 {
-	int health;
-public:
-	HPComponent(int hp) : health(hp) {}
-	void takeDamage(int damage) { health -= damage; }
-	void update() override 
+	class HPComponent : public IComponent 
 	{
-		// TODO: logic
-	}
-};
+	public:
+		int health;
+
+		explicit HPComponent(int hp) : health(hp) {}
+
+		void takeDamage(int damage) 
+		{
+			if(health <= damage) [[unlikely]]
+			{
+				health = 0;
+				return;
+			}
+			else [[likely]]
+			{
+				health -= damage; 
+			}
+		}
+	};
+}

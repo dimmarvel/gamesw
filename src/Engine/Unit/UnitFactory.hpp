@@ -1,12 +1,20 @@
 #pragma once
 #include <memory>
-#include "Raven.hpp"
+#include "Swordsman.hpp"
+#include "Hunter.hpp"
+#include <Engine/Position.hpp>
 
-class UnitFactory 
+namespace sw::engine
 {
-public:
-	static std::unique_ptr<IUnit> createRaven(size_t id, int x, int y, int health, int strength) {
-		return std::make_unique<Raven>(id, health, strength);
-	}
+	class UnitFactory 
+	{
+	public:
+		static std::shared_ptr<IUnit> createSwordsman(size_t id, Position pos, int health, int strength) {
+			return std::make_shared<Swordsman>(id, pos, health, strength);
+		}
 
-};
+		static std::shared_ptr<IUnit> createHunter(size_t id, Position pos, int health, int agility, int strength, int range) {
+			return std::make_shared<Hunter>(id, pos, health, agility, strength, range);
+		}
+	};
+}

@@ -3,20 +3,30 @@
 #include "details/PrintFieldVisitor.hpp"
 #include <iostream>
 #include <typeindex>
-#include <unordered_map>
+#include <Engine/Tick.hpp>
 
 namespace sw
 {
 	class EventLog
 	{
 	public:
+		EventLog(const EventLog&) = delete;
+		EventLog& operator=(const EventLog&) = delete;
+
+		static EventLog& get() {
+			static EventLog instance;
+			return instance;
+		}
+
 		template <class TEvent>
-		void log(uint64_t tick, TEvent&& event)
-		{
-			std::cout << "[" << tick << "] " << TEvent::Name << " ";
+		void log(TEvent&& event) {
+			std::cout << "[" << engine::Tick::get().getTick() << "] " << TEvent::Name << " ";
 			PrintFieldVisitor visitor(std::cout);
 			event.visit(visitor);
 			std::cout << std::endl;
 		}
+
+	private:
+		EventLog() {}
 	};
 }

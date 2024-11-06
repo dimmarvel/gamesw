@@ -5,58 +5,136 @@
 #include <memory>
 #include "IO/System/PrintDebug.hpp"
 #include "Unit/IUnit.hpp"
+#include "Position.hpp"
 
 namespace sw::engine
 {
+	class Cell 
+	{
+	public:
+		Cell() = default;
+		Cell(uint32_t x, uint32_t y) : 
+			unit(nullptr),
+			pos(x, y)
+		{}
+		Cell(Position pos, std::shared_ptr<IUnit> u) : 
+			unit(u),
+			pos(pos)
+		{}
+
+		bool isEmpty() const 
+		{ 
+			return unit == nullptr; 
+		}
+
+		void placeUnit(std::shared_ptr<IUnit> newUnit) 
+		{
+			unit = newUnit;
+		}
+
+		void removeUnit()
+		{
+			unit.reset();
+		}
+
+		std::shared_ptr<IUnit> getUnit() const 
+		{
+			return unit;
+		}
+
+		uint32_t getX() const 
+		{
+			return pos.getX();
+		}
+
+		uint32_t getY() const 
+		{
+			return pos.getY();
+		}
+
+		Position getPosition() const 
+		{
+			return pos;
+		}
+		
+		void setPosition(Position pos) const 
+		{
+			pos = pos;
+		}
+
+	private:
+		std::shared_ptr<IUnit> unit;
+		Position pos;
+	};
+
 	class Map 
 	{
 	private:
-		uint32_t width;
-		uint32_t height;
-		std::vector<std::vector<char>> cells;
+		std::vector<std::vector<Cell>> cells;
 
 	public:
 		Map() = default;
-		Map(uint32_t width, uint32_t height) : 
-				width(width), 
-				height(height), 
-				cells(height, std::vector<char>(width, '.')) 
-		{}
+		Map(uint32_t height, uint32_t width)
+		{
+			cells.resize(height, std::vector<Cell>(width));
+			feelMap(height, width);
+		}
 
-		uint32_t getWidth() const { return width; }
-		uint32_t getHeight() const { return height; }
+		uint32_t getSizeX() const { return cells.size(); }
+		uint32_t getSizeY() const { return cells.at(0).size(); } // TODO: error check
 
-		char getCellContent(uint32_t x, uint32_t y) const 
+		Cell getCellContent(uint32_t x, uint32_t y) const 
 		{
 			//TODO: do checks cout of range
 			return cells[y][x]; 
 		}
 
-		void update()
+		Cell getCellContent(Position pos) const 
 		{
-			//TODO: update map state
+			//TODO: do checks cout of range
+			return cells[pos.getX()][pos.getY()]; 
 		}
 
-		void display()
+		void addUnit(std::shared_ptr<IUnit> unit)
 		{
-			//TODO: display map logic
+			auto pos = unit->getPosition();
+			cells[pos.getX()][pos.getY()].placeUnit(unit);
 		}
 
-		bool addUnit(std::shared_ptr<IUnit> unit, uint32_t x, uint32_t y)
+		void moveUnit(std::shared_ptr<IUnit> unit, Position newPos)
 		{
-			//TODO: addUnit map logic
+			auto cellUnit = getCellContent(unit->getPosition()).getUnit();
+			if(!cellUnit)
+				throw std::runtime_error(std::string("Attempting to move a unit in a cell in which it does not exist"));
+			if(cellUnit->getId() != unit->getId())
+				throw std::runtime_error("Attempt to move another unit into position");
+			
+			auto cell = getCellContent(unit->getPosition());
+			
+			setCellContent(newPos, Cell(newPos, unit));
+			removeUnit(unit);
+		}
+
+		bool removeUnit(std::shared_ptr<IUnit> unit)
+		{
+			auto position = unit->getPosition();
+			cells[position.getX()][position.getY()].removeUnit();
 			return true;
 		}
-		
-		std::unordered_map<size_t, std::shared_ptr<IUnit>> getUnits()
+
+		void setCellContent(Position pos, Cell cell) 
 		{
-			//TODO: add units
-			return {};
+			cells[pos.getX()][pos.getY()] = cell;
 		}
 
-		void setCellContent(uint32_t x, uint32_t y, char content) 
+	private:
+		
+		void feelMap(uint32_t height, uint32_t width)
 		{
-			cells[y][x] = content;
+			for (uint32_t y = 0; y < height; ++y)
+				for (uint32_t x = 0; x < width; ++x)
+					cells[y][x] = Cell(x, y);
 		}
+
 	};
 }

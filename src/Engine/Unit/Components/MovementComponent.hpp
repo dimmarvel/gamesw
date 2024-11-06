@@ -1,24 +1,41 @@
 #pragma once
 #include "IComponent.hpp"
+#include <Engine/Unit/IUnit.hpp>
+#include <Engine/Position.hpp>
+#include <memory>
 
-class MovementComponent : public IComponent 
+namespace sw::engine
 {
-private:
-	int x, y;
-
-public:
-	MovementComponent(int startX, int startY, int spd) : 
-			x(startX), 
-			y(startY)
-	{}
-
-	void move(int targetX, int targetY) 
+	class MovementComponent : public IComponent 
 	{
-		// TODO: logic
-	}
+	private:
+		Position currPosition;
+		bool movable{true};
 
-	void update() override 
-	{
-		// TODO: logic
-	}
-};
+	public:
+		MovementComponent(const Position& pos, bool canMove = true) :
+			currPosition(pos),
+			movable(canMove)
+		{}
+
+		MovementComponent(uint32_t x, uint32_t y) :
+			currPosition(x, y)
+		{}
+
+		void move(uint32_t deltaX, uint32_t deltaY) 
+		{
+			currPosition.move(deltaX, deltaY);
+		}
+
+		Position getPosition()
+		{
+			return currPosition;
+		}
+
+		bool isMovable()
+		{
+			return movable;
+		}
+
+	};
+}

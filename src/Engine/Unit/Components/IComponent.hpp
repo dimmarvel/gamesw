@@ -1,6 +1,9 @@
 #pragma once
-class IComponent {
-public:
-	virtual ~IComponent() = default;
-	virtual void update() = 0;
-};
+
+namespace sw::engine
+{
+	class IComponent {
+	public:
+		virtual ~IComponent() = default;
+	};
+}

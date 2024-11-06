@@ -16,6 +16,7 @@
 #include <iostream>
 #include <Engine/Map.hpp>
 #include <Engine/GameObserver.hpp>
+#include <Engine/Renderer/TextRenderer.hpp>
 
 int main(int argc, char** argv)
 {
@@ -32,12 +33,23 @@ int main(int argc, char** argv)
 		throw std::runtime_error("Error: File not found - " + std::string(argv[1]));
 	}
 
+	try
+	{
+		auto renderer = std::make_unique<engine::TextRenderer>();
+		engine::Settings settings{5, 5, file};
+		engine::GameObserver game(settings, std::move(renderer));
+		game.start();
+		return EXIT_SUCCESS;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		return EXIT_FAILURE;
+	}
+	
 	// Code for example...
-	std::cout << "Commands:\n";
-	EventLog eventLog;
-	engine::GameObserver game(5, 5, file, eventLog);
-
-	std::cout << "\n\nEvents:\n";
+	
+	//std::cout << "\n\nEvents:\n";
 
 	// EventLog eventLog;
 
@@ -73,6 +85,4 @@ int main(int argc, char** argv)
 
 	// eventLog.log(8, io::UnitAttacked{2, 3, 5, 0});
 	// eventLog.log(8, io::UnitDied{3});
-
-	return 0;
 }

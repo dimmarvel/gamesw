@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <Engine/Unit/IUnit.hpp>
 
 namespace sw::io
 {
@@ -9,7 +10,7 @@ namespace sw::io
 	{
 		constexpr static const char* Name = "UNIT_MOVED";
 
-		uint32_t unitId{};
+		engine::IUnit::unitId unitId{};
 		uint32_t x{};
 		uint32_t y{};
 
