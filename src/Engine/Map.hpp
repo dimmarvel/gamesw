@@ -3,24 +3,24 @@
 #include <cstdint>
 #include <unordered_map>
 #include <memory>
-#include "IO/System/PrintDebug.hpp"
-#include "Unit/IUnit.hpp"
+#include <optional>
+
 #include "Position.hpp"
+#include "Unit/IUnit.hpp"
 
 namespace sw::engine
 {
+	class IUnit;
+	class GameObserver;
+
 	class Cell 
 	{
 	public:
 		Cell() = default;
-		Cell(uint32_t x, uint32_t y) : 
-			unit(nullptr),
-			pos(x, y)
-		{}
-		Cell(Position pos, std::shared_ptr<IUnit> u) : 
-			unit(u),
-			pos(pos)
-		{}
+		Cell(uint32_t x, uint32_t y);
+		Cell(Position pos, std::shared_ptr<IUnit> u);
+		Cell(const Cell& other);
+		Cell& operator=(const Cell& other);
 
 		bool isEmpty() const 
 		{ 
@@ -71,70 +71,37 @@ namespace sw::engine
 	{
 	private:
 		std::vector<std::vector<Cell>> cells;
+		std::shared_ptr<GameObserver> gameObserver;
 
 	public:
 		Map() = default;
-		Map(uint32_t height, uint32_t width)
-		{
-			cells.resize(height, std::vector<Cell>(width));
-			feelMap(height, width);
-		}
+		Map(std::shared_ptr<GameObserver> gObserver, uint32_t height, uint32_t width);
+		Map(const Map& other);
+		Map& operator=(const Map& other);
+		~Map() = default;
 
 		uint32_t getSizeX() const { return cells.size(); }
 		uint32_t getSizeY() const { return cells.at(0).size(); } // TODO: error check
 
-		Cell getCellContent(uint32_t x, uint32_t y) const 
-		{
-			//TODO: do checks cout of range
-			return cells[y][x]; 
-		}
+		Cell getCellContent(uint32_t x, uint32_t y) const;
+		Cell getCellContent(const Position& pos) const;
+		void setCellContent(Position pos, Cell cell);
 
-		Cell getCellContent(Position pos) const 
-		{
-			//TODO: do checks cout of range
-			return cells[pos.getX()][pos.getY()]; 
-		}
+		void addUnit(std::shared_ptr<IUnit> unit);
+		void moveUnit(std::shared_ptr<IUnit> unit, Position newPos);
+		bool removeUnit(std::shared_ptr<IUnit> unit);
+		std::optional<unitPtrVec> getAdjacentUnits(const Position& pos);
+		std::shared_ptr<IUnit> getRandomAdjacentUnit(const Position& pos);
+		std::shared_ptr<IUnit> getUnitAt(const Position& pos);
 
-		void addUnit(std::shared_ptr<IUnit> unit)
-		{
-			auto pos = unit->getPosition();
-			cells[pos.getX()][pos.getY()].placeUnit(unit);
-		}
+		std::shared_ptr<IUnit> findUnitInRange(std::shared_ptr<IUnit> unit, Map& map, uint32_t minRange, uint32_t maxRange);
+		
+		// The coordinates are inside the map to avoid going out of bounds
+		bool isWithinBounds(const Position& pos);
+		bool isWithinRange(const Position& from, const Position& to, int minRange, int maxRange);
 
-		void moveUnit(std::shared_ptr<IUnit> unit, Position newPos)
-		{
-			auto cellUnit = getCellContent(unit->getPosition()).getUnit();
-			if(!cellUnit)
-				throw std::runtime_error(std::string("Attempting to move a unit in a cell in which it does not exist"));
-			if(cellUnit->getId() != unit->getId())
-				throw std::runtime_error("Attempt to move another unit into position");
-			
-			auto cell = getCellContent(unit->getPosition());
-			
-			setCellContent(newPos, Cell(newPos, unit));
-			removeUnit(unit);
-		}
-
-		bool removeUnit(std::shared_ptr<IUnit> unit)
-		{
-			auto position = unit->getPosition();
-			cells[position.getX()][position.getY()].removeUnit();
-			return true;
-		}
-
-		void setCellContent(Position pos, Cell cell) 
-		{
-			cells[pos.getX()][pos.getY()] = cell;
-		}
 
 	private:
-		
-		void feelMap(uint32_t height, uint32_t width)
-		{
-			for (uint32_t y = 0; y < height; ++y)
-				for (uint32_t x = 0; x < width; ++x)
-					cells[y][x] = Cell(x, y);
-		}
-
+		void feelMap(uint32_t height, uint32_t width);
 	};
 }

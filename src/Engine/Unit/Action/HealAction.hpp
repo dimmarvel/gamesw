@@ -11,8 +11,11 @@ namespace sw::engine
 	public:
 		explicit HealAction(int amount) : healingAmount(amount) {}
 
-		void execute(std::shared_ptr<IUnit> unit, Map& map) override {
+		ActionType getType() const override { return ActionType::HealingAction; }
+
+		bool execute(std::shared_ptr<IUnit> unit, Map& map) override {
 			std::cout << "Healing unit: " << targetUnit->getId() << " for " << healingAmount << " HP.\n";
+			return true;
 		}
 	};
 }

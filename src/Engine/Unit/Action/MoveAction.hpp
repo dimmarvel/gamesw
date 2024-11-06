@@ -2,6 +2,7 @@
 #include <Engine/Unit/IUnit.hpp>
 #include "IAction.hpp"
 #include <iostream>
+#include <Engine/Map.hpp>
 
 namespace sw::engine
 {
@@ -12,7 +13,9 @@ namespace sw::engine
 	public:
 		MoveAction(Position target) : target(target) {}
 
-		void execute(std::shared_ptr<IUnit> unit, Map& map) override 
+		ActionType getType() const override { return ActionType::MoveAction; }
+
+		bool execute(std::shared_ptr<IUnit> unit, Map& map) override 
 		{
 			if(target.getX() >= map.getSizeX() || target.getY() >= map.getSizeY())
 				throw std::runtime_error("Target MoveAction out of range");
@@ -27,8 +30,10 @@ namespace sw::engine
 			map.moveUnit(unit, newPos);
 			unit->move(deltaPos.getX(), deltaPos.getY());
 			EventLog::get().log(io::UnitMoved{unit->getId(), unit->getPosition().getX(), unit->getPosition().getY()});
+			return true;
 		}
-		
+
+	private:
 		Position calcNewPosition(std::shared_ptr<IUnit> unit, const Map& map) const
 		{
 			if(target.getX() >= map.getSizeX() || target.getY() >= map.getSizeY())

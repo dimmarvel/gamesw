@@ -4,11 +4,21 @@
 namespace sw::engine
 {
 	class Map;
-	
+	enum class ActionType 
+	{
+		AttackAction,
+		MeleeAttackAction,
+		RangeAttackAction,
+		MoveAction,
+		HealingAction,
+		UnknownAction
+	};
+
 	class IAction 
 	{
 	public:
-		virtual void execute(std::shared_ptr<IUnit> unit, Map& map) = 0;
+		virtual bool execute(std::shared_ptr<IUnit> unit, Map& map) = 0;
+		virtual ActionType getType() const = 0;
 		virtual ~IAction() = default;
 	};
 }

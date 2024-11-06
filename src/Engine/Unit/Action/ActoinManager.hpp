@@ -50,7 +50,7 @@ namespace sw::engine
 			{
 				auto action = unitActions[unit].front();
 				unitActions[unit].pop();
-
+				if(action)
 				action->execute(unit, map);
 			}
 

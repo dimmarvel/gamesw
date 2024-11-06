@@ -17,6 +17,7 @@
 #include <Engine/Map.hpp>
 #include <Engine/GameObserver.hpp>
 #include <Engine/Renderer/TextRenderer.hpp>
+#include <Engine/Settings.hpp>
 
 int main(int argc, char** argv)
 {
@@ -37,8 +38,8 @@ int main(int argc, char** argv)
 	{
 		auto renderer = std::make_unique<engine::TextRenderer>();
 		engine::Settings settings{5, 5, file};
-		engine::GameObserver game(settings, std::move(renderer));
-		game.start();
+		std::shared_ptr<engine::GameObserver> game = std::make_shared<engine::GameObserver>(settings, std::move(renderer));
+		game->start();
 		return EXIT_SUCCESS;
 	}
 	catch(const std::exception& e)

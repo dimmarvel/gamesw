@@ -10,7 +10,7 @@ namespace sw::io
 	{
 		constexpr static const char* Name = "UNIT_MOVED";
 
-		engine::IUnit::unitId unitId{};
+		engine::unitId unitId{};
 		uint32_t x{};
 		uint32_t y{};
 
