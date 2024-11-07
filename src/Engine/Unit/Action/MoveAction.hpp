@@ -3,6 +3,8 @@
 #include "IAction.hpp"
 #include <iostream>
 #include <Engine/Map.hpp>
+#include <IO/System/EventLog.hpp>
+#include <IO/Events/UnitMoved.hpp>
 
 namespace sw::engine
 {
@@ -28,9 +30,14 @@ namespace sw::engine
 			);
 
 			map.moveUnit(unit, newPos);
-			unit->move(deltaPos.getX(), deltaPos.getY());
+			unit->getComponent<MovementComponent>()->move(deltaPos.getX(), deltaPos.getY());
 			EventLog::get().log(io::UnitMoved{unit->getId(), unit->getPosition().getX(), unit->getPosition().getY()});
 			return true;
+		}
+
+		Position getTargetPosition()
+		{
+			return target;
 		}
 
 	private:

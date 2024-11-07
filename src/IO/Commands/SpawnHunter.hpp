@@ -10,8 +10,8 @@ namespace sw::io
 		constexpr static const char* Name = "SPAWN_HUNTER";
 
 		uint32_t unitId{};
-		uint32_t x{};
-		uint32_t y{};
+		int x{};
+		int y{};
 		uint32_t hp{};
 		uint32_t agility{};
 		uint32_t strength{};

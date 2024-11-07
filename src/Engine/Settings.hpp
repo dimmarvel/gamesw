@@ -6,8 +6,8 @@ namespace sw::engine
 {
 	struct Settings
 	{
-		uint32_t map_height{};
-		uint32_t map_width{};
+		int map_height{};
+		int map_width{};
 		std::ifstream& file;
 	};
 }

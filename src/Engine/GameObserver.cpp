@@ -67,7 +67,7 @@ namespace sw::engine
 		auto self = shared_from_this();
 		parser.add<io::CreateMap>([self](auto command) 
 		{
-			self->map = Map(self, command.width, command.height);
+			self->map = Map(self->shared_from_this(), command.width, command.height);
 
 			printDebug(std::cout, command);
 		})

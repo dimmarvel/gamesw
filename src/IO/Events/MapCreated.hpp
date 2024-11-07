@@ -8,8 +8,8 @@ namespace sw::io
 	{
 		constexpr static const char* Name = "MAP_CREATED";
 
-		uint32_t width{};
-		uint32_t height{};
+		int width{};
+		int height{};
 
 		template <typename Visitor>
 		void visit(Visitor& visitor)

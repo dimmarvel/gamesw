@@ -1,3 +1,4 @@
+#pragma once
 #include <memory>
 #include <Engine/Unit/IUnit.hpp>
 #include "IAction.hpp"
@@ -5,6 +6,7 @@
 #include <vector>
 #include <queue>
 #include <stdexcept>
+#include <Engine/Unit/Action/ActionFactory.hpp>
 
 namespace sw::engine
 {
@@ -18,7 +20,7 @@ namespace sw::engine
 		size_t currentIndex{0}; 
 
 	public:
-		// Register a unit with ActionManager
+		// Register a unit
 		void registerUnit(std::shared_ptr<IUnit> unit)
 		{
 			auto actionIt = unitActions.find(unit);
@@ -40,8 +42,9 @@ namespace sw::engine
 		}
 
 		// Process one action per unit in round-robin order
-		void processActions(Map& map) {
-			if (unitOrder.empty()) 
+		void processActions(Map& map)
+		{
+			if (unitOrder.empty())
 				return;
 
 			std::shared_ptr<IUnit> unit = unitOrder[currentIndex];
@@ -49,20 +52,71 @@ namespace sw::engine
 			if (!unitActions[unit].empty())
 			{
 				auto action = unitActions[unit].front();
-				unitActions[unit].pop();
-				if(action)
-				action->execute(unit, map);
+				handleAction(unit, map, action);
 			}
 
-			// Move to the next unit for the next tick
-			currentIndex = (currentIndex + 1) % unitOrder.size();
+			incrementNextUnit();
 		}
 
-		bool isAllActionsCompleted() const {
+		bool isAllActionsCompleted() const
+		{
 			for (const auto& [unit, actions] : unitActions) {
 				if (!actions.empty()) return false;
 			}
 			return true;
+		}
+
+	private:
+		// Move to the next unit for the next tick
+		void incrementNextUnit()
+		{
+			currentIndex = (currentIndex + 1) % unitOrder.size();
+		}
+		
+		void handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action)
+		{
+				if(action->getType() != ActionType::AttackAction)
+				{
+					if(handleAttack(unit, map))
+						return;
+				}
+
+				if(action->getType() == ActionType::MoveAction)
+				{
+					auto moveAction = std::static_pointer_cast<MoveAction>(action);
+					if(handleMove(unit, map, moveAction))
+						return;
+				}
+
+		}
+
+		bool handleAttack(std::shared_ptr<IUnit> unit, Map& map)
+		{
+			auto attackAction = ActionFactory::createAttack(unit, map);
+			if(attackAction)
+			{
+				if(attackAction->execute(unit, map))
+				{
+					incrementNextUnit();
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		bool handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<MoveAction> moveAction)
+		{
+			if (moveAction->execute(unit, map))
+			{
+				if(unit->getPosition() == moveAction->getTargetPosition())
+				{
+					unitActions[unit].pop();
+				}
+				incrementNextUnit();
+				return true;
+			}
+			incrementNextUnit();
+			return false;
 		}
 	};
 }

@@ -5,6 +5,8 @@
 #include "Components/AgilityComponent.hpp"
 #include "Components/RangeComponent.hpp"
 #include "Components/HPComponents.hpp"
+#include "Components/MeleeAttackComponent.hpp"
+#include "Components/RangeAttackComponent.hpp"
 #include <IO/Events/UnitAttacked.hpp>
 
 namespace sw::engine
@@ -19,6 +21,8 @@ namespace sw::engine
 			addComponent<AgilityComponent>(agility);
 			addComponent<RangeComponent>(agility);
 			addComponent<MovementComponent>(pos);
+			addComponent<RangeAttackComponent>();
+			addComponent<MeleeAttackComponent>();
 		}
 
 		void move(int dx, int dy) {

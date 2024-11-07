@@ -11,7 +11,7 @@
 namespace sw::engine
 {
 	class IUnit;
-	
+
 	using ComponentType = std::type_index;
 	using ComponentMap = std::unordered_map<ComponentType, std::vector<std::shared_ptr<IComponent>>>;
 	using unitId = uint32_t;
@@ -70,7 +70,7 @@ namespace sw::engine
 			return false;
 		}
 
-		virtual void move(uint32_t deltaX, uint32_t deltaY)
+		virtual void move(int deltaX, int deltaY)
 		{
 			if(!isMovable())
 				throw std::runtime_error("Call move in nonmovable unit");

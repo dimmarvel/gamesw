@@ -4,7 +4,6 @@
 #include <Engine/Unit/Components/HPComponents.hpp>
 #include <IO/System/EventLog.hpp>
 #include <IO/Events/UnitAttacked.hpp>
-
 namespace sw::engine
 {
 	class RangeAttackAction : public IAction {
@@ -33,6 +32,8 @@ namespace sw::engine
 				damage,
 				static_cast<uint32_t>(hpComponent->health)
 			});
+
+			EventLog::get().log(io::UnitAttacked{attackerUnit->getId(), attackTarget->getId(), damage, hpComponent->health});
 			return true;
 		}
 	};

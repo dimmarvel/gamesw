@@ -18,11 +18,11 @@ namespace sw::engine
 			movable(canMove)
 		{}
 
-		MovementComponent(uint32_t x, uint32_t y) :
+		MovementComponent(int x, int y) :
 			currPosition(x, y)
 		{}
 
-		void move(uint32_t deltaX, uint32_t deltaY) 
+		void move(int deltaX, int deltaY) 
 		{
 			currPosition.move(deltaX, deltaY);
 		}

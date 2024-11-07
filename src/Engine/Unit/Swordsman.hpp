@@ -4,6 +4,7 @@
 #include "Components/StrengthComponent.hpp"
 #include "Components/HPComponents.hpp"
 #include "Components/MovementComponent.hpp"
+#include "Components/MeleeAttackComponent.hpp"
 #include <IO/Events/UnitAttacked.hpp>
 #include <IO/System/EventLog.hpp>
 
@@ -17,6 +18,7 @@ namespace sw::engine
 			addComponent<HPComponent>(hp);
 			addComponent<StrengthComponent>(strenght);
 			addComponent<MovementComponent>(pos);
+			addComponent<MeleeAttackComponent>();
 		}
 
 		void move(int dx, int dy) {

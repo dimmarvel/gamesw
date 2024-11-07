@@ -7,7 +7,7 @@
 
 namespace sw::engine
 {
-	Cell::Cell(uint32_t x, uint32_t y) : 
+	Cell::Cell(int x, int y) : 
 		unit(nullptr),
 		pos(x, y)
 	{}
@@ -31,7 +31,8 @@ namespace sw::engine
 		return *this;
 	}
 
-	Map::Map(std::shared_ptr<GameObserver> gObserver, uint32_t height, uint32_t width)
+	Map::Map(std::shared_ptr<GameObserver> gObserver, int height, int width) :
+		gameObserver(gObserver)
 	{
 		cells.resize(height, std::vector<Cell>(width));
 		feelMap(height, width);
@@ -50,7 +51,7 @@ namespace sw::engine
 		return *this;
 	}
 
-	Cell Map::getCellContent(uint32_t x, uint32_t y) const 
+	Cell Map::getCellContent(int x, int y) const 
 	{
 		//TODO: do checks cout of range
 		return cells[y][x]; 
@@ -87,7 +88,8 @@ namespace sw::engine
 		unitPtrVec adjacentUnits;
 		for (int dx = -1; dx <= 1; ++dx) {
 			for (int dy = -1; dy <= 1; ++dy) {
-				if (dx == 0 && dy == 0) continue; // Skip current position
+				// Skip current position and outsidemap positions
+				if (dx == 0 && dy == 0 || pos.getX() >= 0 && pos.getY() >= 0) continue; 
 					Position adjacent(pos.getX() + dx, pos.getY() + dy);
 					auto adjUnit = getUnitAt(adjacent);
 					if (isWithinBounds(adjacent) && (adjUnit != nullptr)) {
@@ -163,10 +165,10 @@ namespace sw::engine
 		cells[pos.getX()][pos.getY()] = cell;
 	}
 
-	void Map::feelMap(uint32_t height, uint32_t width)
+	void Map::feelMap(int height, int width)
 	{
-		for (uint32_t y = 0; y < height; ++y)
-			for (uint32_t x = 0; x < width; ++x)
+		for (int y = 0; y < height; ++y)
+			for (int x = 0; x < width; ++x)
 				cells[y][x] = Cell(x, y);
 	}
 }

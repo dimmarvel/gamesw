@@ -17,50 +17,22 @@ namespace sw::engine
 	{
 	public:
 		Cell() = default;
-		Cell(uint32_t x, uint32_t y);
+		Cell(int x, int y);
 		Cell(Position pos, std::shared_ptr<IUnit> u);
 		Cell(const Cell& other);
 		Cell& operator=(const Cell& other);
 
-		bool isEmpty() const 
-		{ 
-			return unit == nullptr; 
-		}
-
-		void placeUnit(std::shared_ptr<IUnit> newUnit) 
-		{
-			unit = newUnit;
-		}
-
-		void removeUnit()
-		{
-			unit.reset();
-		}
-
-		std::shared_ptr<IUnit> getUnit() const 
-		{
-			return unit;
-		}
-
-		uint32_t getX() const 
-		{
-			return pos.getX();
-		}
-
-		uint32_t getY() const 
-		{
-			return pos.getY();
-		}
-
-		Position getPosition() const 
-		{
-			return pos;
-		}
+		bool isEmpty() const { return unit == nullptr; }
 		
-		void setPosition(Position pos) const 
-		{
-			pos = pos;
-		}
+		void placeUnit(std::shared_ptr<IUnit> newUnit) { unit = newUnit; }
+		void removeUnit() { unit.reset(); }
+		std::shared_ptr<IUnit> getUnit() const  { return unit; }
+		
+		int getX() const { return pos.getX(); }
+		int getY() const { return pos.getY(); }
+
+		Position getPosition() const { return pos; }
+		void setPosition(Position pos) const { pos = pos; }
 
 	private:
 		std::shared_ptr<IUnit> unit;
@@ -75,15 +47,15 @@ namespace sw::engine
 
 	public:
 		Map() = default;
-		Map(std::shared_ptr<GameObserver> gObserver, uint32_t height, uint32_t width);
+		Map(std::shared_ptr<GameObserver> gObserver, int height, int width);
 		Map(const Map& other);
 		Map& operator=(const Map& other);
 		~Map() = default;
 
-		uint32_t getSizeX() const { return cells.size(); }
-		uint32_t getSizeY() const { return cells.at(0).size(); } // TODO: error check
+		int getSizeX() const { return cells.size(); }
+		int getSizeY() const { return cells.at(0).size(); } // TODO: error check
 
-		Cell getCellContent(uint32_t x, uint32_t y) const;
+		Cell getCellContent(int x, int y) const;
 		Cell getCellContent(const Position& pos) const;
 		void setCellContent(Position pos, Cell cell);
 
@@ -100,8 +72,7 @@ namespace sw::engine
 		bool isWithinBounds(const Position& pos);
 		bool isWithinRange(const Position& from, const Position& to, int minRange, int maxRange);
 
-
 	private:
-		void feelMap(uint32_t height, uint32_t width);
+		void feelMap(int height, int width);
 	};
 }

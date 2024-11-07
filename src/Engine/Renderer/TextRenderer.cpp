@@ -7,11 +7,11 @@ namespace sw::engine
 {
 	void TextRenderer::renderMap(const Map& map) 
 	{
-		uint32_t sizeY = map.getSizeY();
-		uint32_t sizeX = map.getSizeX();
+		int sizeY = map.getSizeY();
+		int sizeX = map.getSizeX();
 
-		for (uint32_t y = 0; y < sizeY; ++y) {
-			for (uint32_t x = 0; x < sizeX; ++x) {
+		for (int y = 0; y < sizeY; ++y) {
+			for (int x = 0; x < sizeX; ++x) {
 				Cell cell = map.getCellContent(x, y);
 				auto cellUnit = cell.getUnit();
 				if(cellUnit)

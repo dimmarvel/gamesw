@@ -3,7 +3,6 @@ CMAKE = cmake
 COMMANDS_FILE = commands_example.txt
 EXE_FILE = sw_battle_test
 
-
 debug:
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) && $(CMAKE) -DCMAKE_BUILD_TYPE=Debug ..
