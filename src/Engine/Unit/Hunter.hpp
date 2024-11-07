@@ -4,7 +4,7 @@
 #include "Components/StrengthComponent.hpp"
 #include "Components/AgilityComponent.hpp"
 #include "Components/RangeComponent.hpp"
-#include "Components/HPComponents.hpp"
+#include "Components/HPComponent.hpp"
 #include "Components/MeleeAttackComponent.hpp"
 #include "Components/RangeAttackComponent.hpp"
 #include <IO/Events/UnitAttacked.hpp>

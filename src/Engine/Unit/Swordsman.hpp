@@ -2,7 +2,7 @@
 #include <iostream>
 #include "IUnit.hpp"
 #include "Components/StrengthComponent.hpp"
-#include "Components/HPComponents.hpp"
+#include "Components/HPComponent.hpp"
 #include "Components/MovementComponent.hpp"
 #include "Components/MeleeAttackComponent.hpp"
 #include <IO/Events/UnitAttacked.hpp>

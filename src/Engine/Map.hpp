@@ -52,6 +52,8 @@ namespace sw::engine
 		Map& operator=(const Map& other);
 		~Map() = default;
 
+		std::shared_ptr<GameObserver> getGameObserver() { return gameObserver; }
+
 		int getSizeX() const { return cells.size(); }
 		int getSizeY() const { return cells.at(0).size(); } // TODO: error check
 
@@ -62,9 +64,11 @@ namespace sw::engine
 		void addUnit(std::shared_ptr<IUnit> unit);
 		void moveUnit(std::shared_ptr<IUnit> unit, Position newPos);
 		bool removeUnit(std::shared_ptr<IUnit> unit);
+
 		std::optional<unitPtrVec> getAdjacentUnits(const Position& pos);
 		std::shared_ptr<IUnit> getRandomAdjacentUnit(const Position& pos);
 		std::shared_ptr<IUnit> getUnitAt(const Position& pos);
+
 
 		std::shared_ptr<IUnit> findUnitInRange(std::shared_ptr<IUnit> unit, Map& map, uint32_t minRange, uint32_t maxRange);
 		

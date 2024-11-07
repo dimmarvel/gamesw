@@ -1,8 +1,10 @@
 #pragma once
 #include <memory>
+
 #include "MoveAction.hpp"
 #include "MeleeAttackAction.hpp"
 #include "RangeAttackAction.hpp"
+
 #include <Engine/Position.hpp>
 #include <Engine/Unit/Components/StrengthComponent.hpp>
 #include <Engine/Unit/Components/AgilityComponent.hpp>
@@ -38,7 +40,7 @@ namespace sw::engine
 				if (target)
 					return std::make_shared<MeleeAttackAction>(target, unit->getComponent<StrengthComponent>()->strength);
 			}
-			
+
 			if (hasRangeAttack)
 			{
 				auto target = map.findUnitInRange(unit, map, 2, unit->getComponent<RangeComponent>()->range);

@@ -1,6 +1,6 @@
 #pragma once
 #include "IComponent.hpp"
-#include "HPComponents.hpp"
+#include "HPComponent.hpp"
 
 namespace sw::engine
 {

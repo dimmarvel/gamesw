@@ -7,6 +7,7 @@
 #include <queue>
 #include <stdexcept>
 #include <Engine/Unit/Action/ActionFactory.hpp>
+#include <algorithm>
 
 namespace sw::engine
 {
@@ -44,18 +45,21 @@ namespace sw::engine
 		// Process one action per unit in round-robin order
 		void processActions(Map& map)
 		{
-			if (unitOrder.empty())
-				return;
-
-			std::shared_ptr<IUnit> unit = unitOrder[currentIndex];
-
-			if (!unitActions[unit].empty())
+			do
 			{
-				auto action = unitActions[unit].front();
-				handleAction(unit, map, action);
-			}
+				if (unitOrder.empty())
+					return;
 
-			incrementNextUnit();
+				std::shared_ptr<IUnit> unit = unitOrder[currentIndex];
+
+				if (!unitActions[unit].empty())
+				{
+					auto action = unitActions[unit].front();
+					handleAction(unit, map, action);
+				}
+
+				incrementNextUnit();
+			} while (currentIndex != 0);
 		}
 
 		bool isAllActionsCompleted() const
@@ -64,6 +68,12 @@ namespace sw::engine
 				if (!actions.empty()) return false;
 			}
 			return true;
+		}
+
+
+		bool removeUnit(std::shared_ptr<IUnit> unit)
+		{
+			return std::erase(unitOrder, unit) > 0;
 		}
 
 	private:
@@ -75,14 +85,11 @@ namespace sw::engine
 		
 		void handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action)
 		{
-				if(action->getType() != ActionType::AttackAction)
+				if(action->getType() == ActionType::MoveAction)
 				{
 					if(handleAttack(unit, map))
 						return;
-				}
 
-				if(action->getType() == ActionType::MoveAction)
-				{
 					auto moveAction = std::static_pointer_cast<MoveAction>(action);
 					if(handleMove(unit, map, moveAction))
 						return;
@@ -97,7 +104,6 @@ namespace sw::engine
 			{
 				if(attackAction->execute(unit, map))
 				{
-					incrementNextUnit();
 					return true;
 				}
 			}
@@ -109,13 +115,9 @@ namespace sw::engine
 			if (moveAction->execute(unit, map))
 			{
 				if(unit->getPosition() == moveAction->getTargetPosition())
-				{
 					unitActions[unit].pop();
-				}
-				incrementNextUnit();
 				return true;
 			}
-			incrementNextUnit();
 			return false;
 		}
 	};

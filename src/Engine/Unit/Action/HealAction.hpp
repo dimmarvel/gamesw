@@ -1,6 +1,5 @@
 #pragma once
 #include "IAction.hpp"
-#include <iostream>
 
 namespace sw::engine
 {
@@ -14,7 +13,6 @@ namespace sw::engine
 		ActionType getType() const override { return ActionType::HealingAction; }
 
 		bool execute(std::shared_ptr<IUnit> unit, Map& map) override {
-			std::cout << "Healing unit: " << targetUnit->getId() << " for " << healingAmount << " HP.\n";
 			return true;
 		}
 	};

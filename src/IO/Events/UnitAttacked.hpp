@@ -13,6 +13,7 @@ namespace sw::io
 		uint32_t targetUnitId{};
 		uint32_t damage{};
 		uint32_t targetHp{};
+		std::string attackType{};
 
 		template <typename Visitor>
 		void visit(Visitor& visitor)
@@ -21,6 +22,7 @@ namespace sw::io
 			visitor.visit("targetUnitId", targetUnitId);
 			visitor.visit("damage", damage);
 			visitor.visit("targetHp", targetHp);
+			visitor.visit("actionType", attackType);
 		}
 	};
 }

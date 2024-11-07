@@ -70,13 +70,6 @@ namespace sw::engine
 			return false;
 		}
 
-		virtual void move(int deltaX, int deltaY)
-		{
-			if(!isMovable())
-				throw std::runtime_error("Call move in nonmovable unit");
-			getComponent<MovementComponent>()->move(deltaX, deltaY);
-		}
-
 		virtual Position getPosition()
 		{
 			if(!isMovable())

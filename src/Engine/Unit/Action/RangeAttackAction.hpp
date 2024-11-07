@@ -1,40 +1,16 @@
 #pragma once
-#include <Engine/Unit/IUnit.hpp>
-#include "IAction.hpp"
-#include <Engine/Unit/Components/HPComponents.hpp>
-#include <IO/System/EventLog.hpp>
-#include <IO/Events/UnitAttacked.hpp>
+#include "IAttackAction.hpp"
+
 namespace sw::engine
 {
-	class RangeAttackAction : public IAction {
-	private:
-		uint32_t damage;
-		std::shared_ptr<IUnit> attackTarget;
+	class Map;
 
+	class RangeAttackAction : public IAttackAction {
 	public:
-		explicit RangeAttackAction(std::shared_ptr<IUnit> target, uint32_t dmg) :
-			attackTarget(target),
-			damage(dmg)
-		{}
-		ActionType getType() const override { return ActionType::RangeAttackAction; }
+		explicit RangeAttackAction(std::shared_ptr<IUnit> target, uint32_t dmg);
 
-		bool execute(std::shared_ptr<IUnit> attackerUnit, Map& map) override 
-		{
-			//TODO: Check range for attack, create validation method
+		virtual ActionType getType() const override { return ActionType::RangeAttackAction; }
 
-			auto hpComponent = attackTarget->getComponent<HPComponent>();
-			hpComponent->takeDamage(damage);
-
-			EventLog::get().log(io::UnitAttacked
-			{
-				attackerUnit->getId(),
-				attackTarget->getId(),
-				damage,
-				static_cast<uint32_t>(hpComponent->health)
-			});
-
-			EventLog::get().log(io::UnitAttacked{attackerUnit->getId(), attackTarget->getId(), damage, hpComponent->health});
-			return true;
-		}
+		virtual bool execute(std::shared_ptr<IUnit> attackerUnit, Map& map) override;
 	};
 }

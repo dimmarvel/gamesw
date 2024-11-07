@@ -36,7 +36,10 @@ namespace sw::engine
 		auto unitIt = units.find(id);
 		if(unitIt == units.end())
 			return false;
+		units.erase(unitIt);
 		map.removeUnit(unitIt->second);
+		actionManager.removeUnit(unitIt->second);
+
 		return true;
 	}
 
@@ -68,7 +71,6 @@ namespace sw::engine
 		parser.add<io::CreateMap>([self](auto command) 
 		{
 			self->map = Map(self->shared_from_this(), command.width, command.height);
-
 			printDebug(std::cout, command);
 		})
 		.add<io::SpawnSwordsman>([this](auto command)
@@ -80,7 +82,7 @@ namespace sw::engine
 				command.hp,
 				command.strength
 			));
-			printDebug(std::cout, command); 
+			printDebug(std::cout, command);
 			EventLog::get().log(io::UnitSpawned{command.unitId, "Swordsman", command.x, command.y});
 		})
 		.add<io::SpawnHunter>([this](auto command)
@@ -94,7 +96,7 @@ namespace sw::engine
 				command.strength,
 				command.range
 			));
-			printDebug(std::cout, command); 
+			printDebug(std::cout, command);
 			EventLog::get().log(io::UnitSpawned{command.unitId, "Hunter", command.x, command.y});
 
 		})
