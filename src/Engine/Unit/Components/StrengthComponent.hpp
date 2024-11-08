@@ -1,13 +1,16 @@
 #pragma once
 #include "IComponent.hpp"
-#include "HPComponent.hpp"
+#include "HealthComponent.hpp"
 
 namespace sw::engine
 {
 	class StrengthComponent : public IComponent {
-	public:
+	private:
 		int strength;
+
+	public:
 		
 		explicit StrengthComponent(int streng) : strength(streng) {}
+		inline int getStrength() const noexcept{ return strength; }
 	};
 }

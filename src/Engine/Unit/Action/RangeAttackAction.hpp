@@ -10,7 +10,6 @@ namespace sw::engine
 		explicit RangeAttackAction(std::shared_ptr<IUnit> target, uint32_t dmg);
 
 		virtual ActionType getType() const override { return ActionType::RangeAttackAction; }
-
 		virtual bool execute(std::shared_ptr<IUnit> attackerUnit, Map& map) override;
 	};
 }

@@ -1,73 +1,52 @@
 #pragma once
-#include <iostream>
 #include "IUnit.hpp"
-#include "Components/StrengthComponent.hpp"
-#include "Components/AgilityComponent.hpp"
-#include "Components/RangeComponent.hpp"
-#include "Components/HPComponent.hpp"
-#include "Components/MeleeAttackComponent.hpp"
-#include "Components/RangeAttackComponent.hpp"
-#include <IO/Events/UnitAttacked.hpp>
 
 namespace sw::engine
 {
+
+	/**
+	 * @class Hunter
+	 * @brief Represents a Hunter unit.
+	 * 
+	 * The `Hunter` class is derived from `IUnit` and represents a unit with specific attributes 
+	 * like health, agility, strength, and range. The Hunter unit has the ability to perform both 
+	 * ranged and melee attacks, as well as calculate the damage dealt during a melee attack.
+	 * 
+	 * @see IUnit
+	 */
 	class Hunter : public IUnit {
 	public:
-		Hunter(size_t id, Position pos, int health, int agility, int strenght, int range) // TODO: mabye do componentMap here
-		{
-			setId(id);
-			addComponent<HPComponent>(health);
-			addComponent<StrengthComponent>(strenght);
-			addComponent<AgilityComponent>(agility);
-			addComponent<RangeComponent>(agility);
-			addComponent<MovementComponent>(pos);
-			addComponent<RangeAttackComponent>();
-			addComponent<MeleeAttackComponent>();
-		}
+		Hunter(size_t id, Position pos, int health, int agility, int strenght, int range);
 
-		void move(int dx, int dy) {
-			//TODO: do logs
-		}
+		/**
+		 * @brief Calculates the damage dealt by a melee attack.
+		 * 
+		 * This method calculates the damage of a melee attack based on the Hunter's strength and 
+		 * other relevant factors (e.g., weapon, buffs, etc.).
+		 * 
+		 * @return The amount of damage dealt in a melee attack.
+		 */
+		uint32_t meleeDamage();
 		
-		uint32_t rangeDamage()
-		{
-			return getComponent<AgilityComponent>()->agility;
-		}
+		Position getPosition();
+		/**
+		 * @brief Performs a ranged attack on the target unit.
+		 * 
+		 * This method allows the Hunter unit to perform a ranged attack on a specified target unit.
+		 * The target unit's health and other states may be affected depending on the attack's outcome.
+		 * 
+		 * @param target The unit to target with the ranged attack.
+		 */
+		void rangeAttack(IUnit& target);
 
-		uint32_t meleeDamage()
-		{
-			return getComponent<StrengthComponent>()->strength;
-		}
-
-		Position getPosition()
-		{
-			return getComponent<MovementComponent>()->getPosition();
-		}
-
-		void rangeAttack(IUnit& target) {
-			auto rangeComp = getComponent<RangeComponent>();
-			if (rangeComp) // TODO: throw if doesnt exist
-			{
-				auto targetHealth = target.getComponent<HPComponent>();
-				if (targetHealth) 
-				{
-					targetHealth->takeDamage(meleeDamage());
-					//TODO: do logs take damage mabue inside take damage
-				}
-			}
-		}
-
-		void meleeAttack(IUnit& target) {
-			auto rangeComp = getComponent<RangeComponent>();
-			if (rangeComp) // TODO: throw if doesnt exist
-			{
-				auto targetHealth = target.getComponent<HPComponent>();
-				if (targetHealth) 
-				{
-					targetHealth->takeDamage(rangeDamage());
-					//TODO: do logs take damage mabue inside take damage
-				}
-			}
-		}
+		/**
+		 * @brief Performs a melee attack on the target unit.
+		 * 
+		 * This method allows the Hunter unit to perform a melee attack on a specified target unit.
+		 * The target unit's health and other states may be affected depending on the attack's outcome.
+		 * 
+		 * @param target The unit to target with the melee attack.
+		 */
+		void meleeAttack(IUnit& target);
 	};
 }

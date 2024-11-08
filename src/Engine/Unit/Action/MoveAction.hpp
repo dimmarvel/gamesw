@@ -1,66 +1,66 @@
 #pragma once
-#include <Engine/Unit/IUnit.hpp>
 #include "IAction.hpp"
-#include <iostream>
-#include <Engine/Map.hpp>
-#include <IO/System/EventLog.hpp>
-#include <IO/Events/UnitMoved.hpp>
+#include <Engine/Position.hpp>
 
 namespace sw::engine
 {
-	class MoveAction : public IAction {
+	class Map;
+	class IUnit;
+
+	/**
+	 * @class MoveAction
+	 * @brief Represents a move action for a unit.
+	 * 
+	 * This class implements the `IAction` interface to define the logic for moving a unit 
+	 * to a specified target position on the map. The movement is based on the unit's position 
+	 * and the provided target position. Derived classes can override behavior if necessary.
+	 * 
+	 * @see IAction
+	 */
+	class MoveAction : public IAction
+	{
 	private:
-		Position target;
+		Position targetPos;
 
 	public:
-		MoveAction(Position target) : target(target) {}
+		MoveAction(Position target);
+		virtual ~MoveAction() = default;
 
-		ActionType getType() const override { return ActionType::MoveAction; }
+		virtual ActionType getType() const override { return ActionType::MoveAction; }
 
-		bool execute(std::shared_ptr<IUnit> unit, Map& map) override 
-		{
-			if(target.getX() >= map.getSizeX() || target.getY() >= map.getSizeY())
-				throw std::runtime_error("Target MoveAction out of range");
+		/**
+		 * @brief Executes the move action.
+		 * 
+		 * This method moves the unit to the specified target position if possible. The actual movement
+		 * depends on the unit's movement capabilities and any obstacles on the map.
+		 * 
+		 * @param unit The unit performing the move action.
+		 * @param map The game map, which contains the information needed to move the unit (e.g., obstacles).
+		 * @return `true` if the move was successful, `false` otherwise.
+		 */
+		virtual bool execute(std::shared_ptr<IUnit> unit, Map& map) override;
 
-			Position deltaPos = calcNewPosition(unit, map);
-			Position currUnitPos = unit->getPosition();
-			Position newPos(
-				deltaPos.getX() + currUnitPos.getX(), 
-				deltaPos.getY() + currUnitPos.getY()
-			);
-
-			map.moveUnit(unit, newPos);
-			unit->getComponent<MovementComponent>()->move(deltaPos.getX(), deltaPos.getY());
-			EventLog::get().log(io::UnitMoved{unit->getId(), unit->getPosition().getX(), unit->getPosition().getY()});
-			return true;
-		}
-
-		Position getTargetPosition()
-		{
-			return target;
-		}
+		/**
+		 * @brief Gets the target position of the move action.
+		 * 
+		 * This inline function returns the position to which the unit will move.
+		 *
+		 * @return The target position of the move action.
+		 */
+		inline Position getTargetPosition() const noexcept { return targetPos; }
 
 	private:
-		Position calcNewPosition(std::shared_ptr<IUnit> unit, const Map& map) const
-		{
-			if(target.getX() >= map.getSizeX() || target.getY() >= map.getSizeY())
-				throw std::runtime_error("Target MoveAction out of range");
-
-			int deltaX = static_cast<int>(target.getX()) - static_cast<int>(unit->getPosition().getX());
-			int deltaY = static_cast<int>(target.getY()) - static_cast<int>(unit->getPosition().getY());
-
-			int moveX = 0;
-			int moveY = 0;
-
-			if (deltaX != 0) {
-				moveX = deltaX > 0 ? 1 : -1;
-			}
-
-			if (deltaY != 0) {
-				moveY = deltaY > 0 ? 1 : -1;
-			}
-			return Position(moveX, moveY);
-		}
-
+		/**
+		 * @brief Calculates the new position for the unit after the move.
+		 * 
+		 * This helper function calculates the new position for the unit based on its current position 
+		 * and the map's layout. It ensures that the move is valid and respects any constraints (e.g., 
+		 * avoiding obstacles).
+		 *
+		 * @param unit The unit performing the move.
+		 * @param map The game map, which is used to determine the new position.
+		 * @return The new position after the move.
+		 */
+		Position calcNewPosition(std::shared_ptr<IUnit> unit, const Map& map) const;
 	};
 }

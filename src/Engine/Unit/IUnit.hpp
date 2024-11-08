@@ -1,22 +1,29 @@
 #pragma once
+#include <Engine/Unit/Components/IComponent.hpp>
+#include <Engine/Unit/Components/MovementComponent.hpp>
+
 #include <unordered_map>
 #include <typeindex>
 #include <memory>
-#include <Engine/Unit/Components/IComponent.hpp>
-#include <Engine/Position.hpp>
-#include <Engine/Unit/Components/MovementComponent.hpp>
-#include <optional>
 #include <vector>
 
 namespace sw::engine
 {
 	class IUnit;
+	class Position;
 
 	using ComponentType = std::type_index;
 	using ComponentMap = std::unordered_map<ComponentType, std::vector<std::shared_ptr<IComponent>>>;
 	using unitId = uint32_t;
 	using unitPtrVec = std::vector<std::shared_ptr<IUnit>>;
-
+	/**
+	 * @class IUnit
+	 * @brief Interface representing a game unit with components and a unique ID.
+	 * 
+	 * IUnit defines the basic structure for game units, supporting components for 
+	 * various capabilities such as movement, health, and attack. Components are stored
+	 * and managed in a map, enabling flexible unit customization.
+	 */
 	class IUnit
 	{
 	public:
@@ -28,16 +35,26 @@ namespace sw::engine
 	public:
 		virtual ~IUnit() = default;
 
-		inline unitId getId() const { return _id; }
-		inline void setId(unitId id) { _id = id; }
-
+		/**
+		 * @brief Adds a new component to the unit.
+		 * @tparam ComponentT The type of component being added.
+		 * @tparam Args Argument types to construct the component.
+		 * @param args Arguments to initialize the component.
+		 * 
+		 * This method constructs a new component of type `ComponentT` with the given arguments
+		 * and adds it to the unit's component map.
+		 */
 		template<typename ComponentT, typename... Args>
 		void addComponent(Args&&... args)
 		{
 			components[typeid(ComponentT)].push_back(std::make_shared<ComponentT>(std::forward<Args>(args)...));
 		}
 
-		// Return first component in Vector<IComponents> by ComponentT
+		/**
+		 * @brief Retrieves the first component of a specific type.
+		 * @tparam ComponentT The type of component to retrieve.
+		 * @return A shared pointer to the first component of type `ComponentT`, or `nullptr` if not found.
+		 */
 		template<typename ComponentT>
 		std::shared_ptr<ComponentT> getComponent() 
 		{
@@ -49,7 +66,11 @@ namespace sw::engine
 			return nullptr;
 		}
 
-		// Return Vector<IComponents> by ComponentT
+		/**
+		 * @brief Retrieves all components of a specific type.
+		 * @tparam ComponentT The type of components to retrieve.
+		 * @return A vector of shared pointers to all components of type `ComponentT`, or an empty vector if none found.
+		 */
 		template<typename ComponentT>
 		std::shared_ptr<ComponentT> getAllComponents() 
 		{
@@ -61,20 +82,19 @@ namespace sw::engine
 			return nullptr;
 		}
 
-		bool isMovable()
-		{
-			auto movement = getComponent<MovementComponent>();
-			if(movement)
-				if(movement->isMovable())
-					return true;
-			return false;
-		}
+		inline unitId getId() const noexcept { return _id; }
+		inline void setId(unitId id) noexcept { _id = id; }
 
-		virtual Position getPosition()
-		{
-			if(!isMovable())
-				throw std::runtime_error("Call move in nonmovable unit");
-			return getComponent<MovementComponent>()->getPosition();
-		}
+		/**
+		 * @brief Checks if the unit is movable.
+		 * @return `true` if the unit can move, `false` otherwise.
+		 */
+		bool isMovable();
+
+		/**
+		 * @brief Retrieves the unit's current position.
+		 * @return The position of the unit as a `Position` object.
+		 */
+		virtual Position getPosition();
 	};
 }

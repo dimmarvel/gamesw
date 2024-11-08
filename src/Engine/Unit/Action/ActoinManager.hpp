@@ -1,16 +1,26 @@
 #pragma once
 #include <memory>
-#include <Engine/Unit/IUnit.hpp>
-#include "IAction.hpp"
 #include <unordered_map>
 #include <vector>
 #include <queue>
-#include <stdexcept>
-#include <Engine/Unit/Action/ActionFactory.hpp>
 #include <algorithm>
 
 namespace sw::engine
 {
+	class IAction;
+	class IUnit;
+	class Map;
+	class MoveAction;
+
+	/**
+	 * @class ActionManager
+	 * @brief Manages and processes actions for units in a game.
+	 * 
+	 * The ActionManager class is responsible for managing actions for units
+	 * in a round-robin order. It maintains a queue of actions for each unit,
+	 * allowing each unit to execute actions in sequence. It also facilitates 
+	 * the addition, removal, and processing of actions for each unit.
+	 */
 	class ActionManager {
 		using ActionQueue = std::queue<std::shared_ptr<IAction>>;
 		using UnitActionsMap = std::unordered_map<std::shared_ptr<IUnit>, ActionQueue>;
@@ -21,104 +31,84 @@ namespace sw::engine
 		size_t currentIndex{0}; 
 
 	public:
-		// Register a unit
-		void registerUnit(std::shared_ptr<IUnit> unit)
-		{
-			auto actionIt = unitActions.find(unit);
-			if(actionIt != unitActions.end())
-				throw std::runtime_error("Unit already registered in ActionManager");
-				
-			unitActions[unit] = std::queue<std::shared_ptr<IAction>>();
-			unitOrder.push_back(unit);
-		}
+		/**
+		 * @brief Registers a unit to the ActionManager.
+		 * @param unit The unit to register.
+		 * @throws std::runtime_error if the unit is already registered.
+		 */
+		void registerUnit(std::shared_ptr<IUnit> unit);
 
-		// Add an action for a specific unit
-		void addAction(std::shared_ptr<IUnit> unit, std::shared_ptr<IAction> action)
-		{
-			auto unitIt = unitActions.find(unit);
-			if(unitIt == unitActions.end())
-				throw std::runtime_error("Unit has not been registered");
+		/**
+		 * @brief Adds an action to a unit's action queue.
+		 * @param unit The unit to add the action for.
+		 * @param action The action to add.
+		 * @throws std::runtime_error if the unit is not registered.
+		 */
+		void addAction(std::shared_ptr<IUnit> unit, std::shared_ptr<IAction> action);
 
-			unitActions[unit].push(action);
-		}
+		/**
+		 * @brief Processes one action for each unit in round-robin order.
+		 * @param map The game map on which actions are executed.
+		 * 
+		 * Each unit takes turns executing its queued actions until all units
+		 * have processed an action.
+		 */
+		void processActions(Map& map);
 
-		// Process one action per unit in round-robin order
-		void processActions(Map& map)
-		{
-			do
-			{
-				if (unitOrder.empty())
-					return;
+		/**
+		 * @brief Checks if all units have completed their actions.
+		 * @return True if all actions are completed, false otherwise.
+		 */
+		bool isAllActionsCompleted() const;
 
-				std::shared_ptr<IUnit> unit = unitOrder[currentIndex];
-
-				if (!unitActions[unit].empty())
-				{
-					auto action = unitActions[unit].front();
-					handleAction(unit, map, action);
-				}
-
-				incrementNextUnit();
-			} while (currentIndex != 0);
-		}
-
-		bool isAllActionsCompleted() const
-		{
-			for (const auto& [unit, actions] : unitActions) {
-				if (!actions.empty()) return false;
-			}
-			return true;
-		}
-
-
-		bool removeUnit(std::shared_ptr<IUnit> unit)
-		{
-			return std::erase(unitOrder, unit) > 0;
-		}
+		/**
+		 * @brief Removes a unit and its associated actions from the ActionManager.
+		 * @param unit The unit to remove.
+		 * @return True if the unit was removed, false if the unit was not found.
+		 */
+		bool removeUnit(std::shared_ptr<IUnit> unit);
 
 	private:
-		// Move to the next unit for the next tick
-		void incrementNextUnit()
-		{
-			currentIndex = (currentIndex + 1) % unitOrder.size();
-		}
-		
-		void handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action)
-		{
-				if(action->getType() == ActionType::MoveAction)
-				{
-					if(handleAttack(unit, map))
-						return;
+		/**
+		 * @brief Advances to the next unit in the round-robin order.
+		 * 
+		 * This method increments the currentIndex to point to the next unit,
+		 * wrapping around to the beginning of the unit list if needed.
+		 */
+		void incrementNextUnit();
 
-					auto moveAction = std::static_pointer_cast<MoveAction>(action);
-					if(handleMove(unit, map, moveAction))
-						return;
-				}
+		/**
+		 * @brief Handles the execution of a unit's action.
+		 * @param unit The unit performing the action.
+		 * @param map The game map on which the action is executed.
+		 * @param action The action to execute.
+		 * 
+		 * This function checks the action type and delegates handling to
+		 * specific methods such as `handleMove` or `handleAttack`.
+		 */
+		void handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action);
 
-		}
+		/**
+		 * @brief Attempts to execute an attack action for a unit.
+		 * @param unit The unit attempting the attack.
+		 * @param map The game map on which the attack is executed.
+		 * @return True if the attack action was executed, false otherwise.
+		 * 
+		 * If an attack is possible, this function executes the attack and returns true.
+		 * If no attack can be performed, it returns false.
+		 */
+		bool handleAttack(std::shared_ptr<IUnit> unit, Map& map);
 
-		bool handleAttack(std::shared_ptr<IUnit> unit, Map& map)
-		{
-			auto attackAction = ActionFactory::createAttack(unit, map);
-			if(attackAction)
-			{
-				if(attackAction->execute(unit, map))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		bool handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<MoveAction> moveAction)
-		{
-			if (moveAction->execute(unit, map))
-			{
-				if(unit->getPosition() == moveAction->getTargetPosition())
-					unitActions[unit].pop();
-				return true;
-			}
-			return false;
-		}
+		/**
+		 * @brief Attempts to execute a move action for a unit.
+		 * @param unit The unit attempting to move.
+		 * @param map The game map on which the move is executed.
+		 * @param moveAction The move action to execute.
+		 * @return True if the move action was successful, false otherwise.
+		 * 
+		 * This function executes the move action. If the unit reaches its target position,
+		 * the action is removed from the unit's action queue.
+		 */
+		bool handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<MoveAction> moveAction);
 	};
 }

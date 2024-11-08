@@ -58,6 +58,7 @@ namespace sw::engine
 
 			actionManager.processActions(map);
 			if (checkGameEnd() || actionManager.isAllActionsCompleted()) {
+				renderer->renderMap(map);
 				//TODO: log Game Over!
 				break;
 			}

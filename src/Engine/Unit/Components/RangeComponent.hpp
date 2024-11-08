@@ -1,13 +1,16 @@
 #pragma once
 #include "IComponent.hpp"
-#include "HPComponent.hpp"
+#include "HealthComponent.hpp"
 
 namespace sw::engine
 {
 	class RangeComponent : public IComponent {
-	public:
+	private:
 		int range;
+
+	public:
 		
 		explicit RangeComponent(int r) : range(r) {}
+		inline int getRange() const noexcept{ return range; }
 	};
 }

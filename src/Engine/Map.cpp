@@ -53,14 +53,12 @@ namespace sw::engine
 
 	Cell Map::getCellContent(int x, int y) const 
 	{
-		//TODO: do checks cout of range
-		return cells[y][x]; 
+		return cells[x][y]; 
 	}
 
 	Cell Map::getCellContent(const Position& pos) const 
 	{
-		//TODO: do checks cout of range
-		return cells[pos.getX()][pos.getY()]; 
+		return cells[pos.getX()][pos.getY()];
 	}
 
 	void Map::addUnit(std::shared_ptr<IUnit> unit)
@@ -72,8 +70,10 @@ namespace sw::engine
 	void Map::moveUnit(std::shared_ptr<IUnit> unit, Position newPos)
 	{
 		auto cellUnit = getCellContent(unit->getPosition()).getUnit();
+
 		if(!cellUnit)
-			throw std::runtime_error(std::string("Attempting to move a unit in a cell in which it does not exist"));
+			throw std::runtime_error("Attempting to move a unit in a cell in which it does not exist");
+
 		if(cellUnit->getId() != unit->getId())
 			throw std::runtime_error("Attempt to move another unit into position");
 		

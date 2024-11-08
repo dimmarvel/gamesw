@@ -19,7 +19,7 @@ namespace sw::engine
 					std::cout << cellUnit->getId();
 				}
 				else
-					std::cout << ".";
+					std::cout << "-";
 			}
 			std::cout << '\n';
 		}

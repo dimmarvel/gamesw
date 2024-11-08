@@ -1,11 +1,17 @@
-#include "HPComponent.hpp"
+#include "HealthComponent.hpp"
+
 #include <Engine/GameObserver.hpp>
+
 #include <IO/Events/UnitDied.hpp>
 #include <IO/System/EventLog.hpp>
 
 namespace sw::engine
 {
-	bool HPComponent::processUnitDeath(unitId id, std::shared_ptr<GameObserver> gObserver)
+	HealthComponent::HealthComponent(int hp) : 
+		health(hp)
+	{}
+
+	bool HealthComponent::processUnitDeath(unitId id, std::shared_ptr<GameObserver> gObserver)
 	{
 		if(!gObserver->removeUnit(id))
 			return false;
@@ -13,7 +19,7 @@ namespace sw::engine
 		return true;
 	}
 
-	void HPComponent::takeDamage(int damage) 
+	void HealthComponent::takeDamage(int damage) 
 	{
 		if(health <= damage) [[unlikely]]
 			health = 0;
@@ -21,7 +27,7 @@ namespace sw::engine
 			health -= damage; 
 	}
 
-	bool HPComponent::isAlive() 
+	bool HealthComponent::isAlive() 
 	{
 		return health > 0;
 	}

@@ -3,8 +3,17 @@
 
 namespace sw::engine
 {
-	// It's not a good idea to keep a tick in singleton and get it for every event.
-	// In a multithreaded environment it will be a pain.
+	/**
+	 * @class Tick
+	 * @brief Singleton class for managing the game's tick counter.
+	 * 
+	 * The `Tick` class provides a mechanism for tracking the passage of time within the game,
+	 * using a counter that increments with each "tick." This class follows the singleton pattern,
+	 * ensuring there is only one instance of `Tick` throughout the game.
+	 * 
+	 * The tick counter is managed atomically, allowing it to be safely accessed and updated
+	 * in a multi-threaded environment.
+	 */
 	class Tick
 	{
 	public:

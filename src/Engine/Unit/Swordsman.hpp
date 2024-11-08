@@ -1,45 +1,40 @@
 #pragma once
-#include <iostream>
 #include "IUnit.hpp"
-#include "Components/StrengthComponent.hpp"
-#include "Components/HPComponent.hpp"
-#include "Components/MovementComponent.hpp"
-#include "Components/MeleeAttackComponent.hpp"
-#include <IO/Events/UnitAttacked.hpp>
-#include <IO/System/EventLog.hpp>
 
 namespace sw::engine
 {
+	/**
+	 * @class Swordsman
+	 * @brief Represents a Swordsman unit.
+	 * 
+	 * The `Swordsman` class is derived from `IUnit` and represents a unit specialized in melee combat. 
+	 * The Swordsman unit is equipped with a specified amount of health, strength, and the ability to 
+	 * perform melee attacks on other units.
+	 * 
+	 * @see IUnit
+	 */
 	class Swordsman : public IUnit {
 	public:
-		Swordsman(size_t id, Position pos, int hp, int strenght) 
-		{
-			setId(id);
-			addComponent<HPComponent>(hp);
-			addComponent<StrengthComponent>(strenght);
-			addComponent<MovementComponent>(pos);
-			addComponent<MeleeAttackComponent>();
-		}
+		Swordsman(size_t id, Position pos, int hp, int strenght);
 
-		void move(int dx, int dy) {
-			//TODO: do logs
-		}
+		/**
+		 * @brief Performs an attack on the target unit.
+		 * 
+		 * This method allows the Swordsman unit to attack a target unit, typically dealing damage 
+		 * based on the Swordsman's strength and the target's defense. The target's health is affected 
+		 * as a result of the attack.
+		 * 
+		 * @param target The unit to target with the attack.
+		 */
+		void attack(IUnit& target);
 
-		void attack(IUnit& target) {
-			auto strenghtComp = getComponent<StrengthComponent>();
-			if (strenghtComp)
-			{
-				auto targetHealth = target.getComponent<HPComponent>();
-				if (targetHealth) {
-					targetHealth->takeDamage(strenghtComp->strength);
-					//TODO: do logs take damage mabue inside take damage
-				}
-			}
-		}
-
-		Position getPosition()
-		{
-			return getComponent<MovementComponent>()->getPosition();
-		}
+		/**
+		 * @brief Gets the position of the Swordsman unit.
+		 * 
+		 * This method retrieves the current position of the Swordsman unit on the map.
+		 * 
+		 * @return The current position of the unit.
+		 */
+		Position getPosition();
 	};
 }
