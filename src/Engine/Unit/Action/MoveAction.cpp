@@ -2,8 +2,7 @@
 
 #include <Engine/Unit/IUnit.hpp>
 #include "IAction.hpp"
-#include <iostream>
-#include <Engine/Map.hpp>
+#include <Engine/Core/Map.hpp>
 #include <IO/System/EventLog.hpp>
 #include <IO/Events/UnitMoved.hpp>
 

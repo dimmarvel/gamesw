@@ -17,7 +17,7 @@ namespace sw::engine
 	 * a unit can perform an attack action based on its components and the current
 	 * game state.
 	 */
-	class ActionFactory 
+	class ActionFactory final
 	{
 	public:
 		/**

@@ -4,7 +4,7 @@
 
 namespace sw::engine
 {
-	class AgilityComponent : public IComponent
+	class AgilityComponent final : public IComponent
 	{
 	private:
 		int agility;

@@ -2,8 +2,8 @@
 
 #include <Engine/Unit/Components/HealthComponent.hpp>
 #include <Engine/Unit/IUnit.hpp>
-#include <Engine/Utils.hpp>
-#include <Engine/Map.hpp>
+#include <Engine/Core/Utils.hpp>
+#include <Engine/Core/Map.hpp>
 
 #include <IO/System/EventLog.hpp>
 #include <IO/Events/UnitAttacked.hpp>

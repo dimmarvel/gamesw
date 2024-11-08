@@ -4,7 +4,7 @@
 
 namespace sw::engine
 {
-	struct Settings
+	struct Settings final
 	{
 		int map_height{};
 		int map_width{};

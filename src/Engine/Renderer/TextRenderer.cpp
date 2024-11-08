@@ -1,7 +1,7 @@
 #include "TextRenderer.hpp"
 #include "IO/Events/MapCreated.hpp"
 #include <iostream>
-#include <Engine/Map.hpp>
+#include <Engine/Core/Map.hpp>
 
 namespace sw::engine
 {

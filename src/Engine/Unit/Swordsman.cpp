@@ -1,4 +1,3 @@
-#pragma once
 #include "Swordsman.hpp"
 
 #include "Components/StrengthComponent.hpp"

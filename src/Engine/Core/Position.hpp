@@ -11,7 +11,7 @@ namespace sw::engine
 	 * a 2D grid. It provides utility methods for accessing and modifying these coordinates,
 	 * as well as for comparing positions and moving them in relation to other positions.
 	 */
-	class Position 
+	class Position final
 	{
 	private:
 		int x{};

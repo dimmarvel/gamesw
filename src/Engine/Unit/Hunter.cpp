@@ -1,4 +1,3 @@
-#pragma once
 #include "Hunter.hpp"
 
 #include "Components/StrengthComponent.hpp"

@@ -4,7 +4,7 @@
 
 namespace sw::engine
 {
-	class StrengthComponent : public IComponent {
+	class StrengthComponent final : public IComponent {
 	private:
 		int strength;
 

@@ -14,7 +14,7 @@ namespace sw::engine
 	 * 
 	 * @see IUnit
 	 */
-	class Hunter : public IUnit {
+	class Hunter final : public IUnit {
 	public:
 		Hunter(size_t id, Position pos, int health, int agility, int strenght, int range);
 

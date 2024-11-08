@@ -6,14 +6,14 @@
 #include <optional>
 
 #include "Position.hpp"
-#include "Unit/IUnit.hpp"
+#include <Engine/Unit/IUnit.hpp>
 
 namespace sw::engine
 {
 	class IUnit;
 	class GameObserver;
 
-	class Cell 
+	class Cell final
 	{
 	public:
 		Cell() = default;
@@ -56,7 +56,7 @@ namespace sw::engine
 		Position pos;
 	};
 
-	class Map 
+	class Map final
 	{
 	private:
 		std::vector<std::vector<Cell>> cells;

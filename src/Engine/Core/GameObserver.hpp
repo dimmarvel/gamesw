@@ -25,7 +25,7 @@ namespace sw::engine
 	 * @see IRenderer, ActionManager, Map, UnitsMap
 	 */
 
-	class GameObserver : public std::enable_shared_from_this<GameObserver>
+	class GameObserver final : public std::enable_shared_from_this<GameObserver>
 	{
 		Map map;
 		Settings& settings;

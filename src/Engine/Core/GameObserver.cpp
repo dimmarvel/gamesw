@@ -9,11 +9,11 @@
 
 #include <Engine/Renderer/IRenderer.hpp>
 #include <Engine/Unit/UnitFactory.hpp>
-#include <Engine/Position.hpp>
+#include <Engine/Core/Position.hpp>
 #include <Engine/Unit/Action/ActionFactory.hpp>
+#include <Engine/Unit/IUnit.hpp>
 
 #include "GameObserver.hpp"
-#include "Unit/IUnit.hpp"
 #include "Settings.hpp"
 #include "Tick.hpp"
 
@@ -52,14 +52,13 @@ namespace sw::engine
 	{
 		setup();
 		while (true) {
-			//TODO: log Tick
 			renderer->renderMap(map);
 			std::cout << "Tik: " << Tick::get().incrementTick() << std::endl;
 
 			actionManager.processActions(map);
 			if (checkGameEnd() || actionManager.isAllActionsCompleted()) {
 				renderer->renderMap(map);
-				//TODO: log Game Over!
+				std::cout << "Game Is Over!" << std::endl;
 				break;
 			}
 			std::this_thread::sleep_for(std::chrono::seconds(1)); // Delay

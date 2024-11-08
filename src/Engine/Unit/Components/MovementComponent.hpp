@@ -1,7 +1,7 @@
 #pragma once
 #include "IComponent.hpp"
 #include <Engine/Unit/IUnit.hpp>
-#include <Engine/Position.hpp>
+#include <Engine/Core/Position.hpp>
 #include <memory>
 
 namespace sw::engine
@@ -14,7 +14,7 @@ namespace sw::engine
 	 * It tracks the current position of the unit and whether the unit is allowed to move.
 	 * The component allows updating the unit's position and checking if it is movable.
 	 */
-	class MovementComponent : public IComponent 
+	class MovementComponent final : public IComponent 
 	{
 	private:
 		Position currPosition;

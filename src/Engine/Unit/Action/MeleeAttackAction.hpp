@@ -5,7 +5,7 @@ namespace sw::engine
 {
 	class Map;
 
-	class MeleeAttackAction : public IAttackAction
+	class MeleeAttackAction final : public IAttackAction
 	{
 	public:
 		explicit MeleeAttackAction(std::shared_ptr<IUnit> target, uint32_t dmg);

@@ -2,11 +2,11 @@
 #include <memory>
 #include "Swordsman.hpp"
 #include "Hunter.hpp"
-#include <Engine/Position.hpp>
+#include <Engine/Core/Position.hpp>
 
 namespace sw::engine
 {
-	class UnitFactory 
+	class UnitFactory final
 	{
 	public:
 		static std::shared_ptr<IUnit> createSwordsman(size_t id, Position pos, int health, int strength)

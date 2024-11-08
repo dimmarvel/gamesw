@@ -14,7 +14,7 @@ namespace sw::engine
 	 * The tick counter is managed atomically, allowing it to be safely accessed and updated
 	 * in a multi-threaded environment.
 	 */
-	class Tick
+	class Tick final
 	{
 	public:
 		Tick(const Tick&) = delete;

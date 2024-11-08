@@ -18,7 +18,7 @@ namespace sw::engine
 	 * 
 	 * @see IComponent
 	 */
-	class HealthComponent : public IComponent 
+	class HealthComponent final : public IComponent 
 	{
 	private:
 		int health;

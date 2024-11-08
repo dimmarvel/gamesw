@@ -4,8 +4,8 @@
 #include "MeleeAttackAction.hpp"
 #include "RangeAttackAction.hpp"
 
-#include <Engine/Map.hpp>
-#include <Engine/Position.hpp>
+#include <Engine/Core/Map.hpp>
+#include <Engine/Core/Position.hpp>
 #include <Engine/Unit/Components/StrengthComponent.hpp>
 #include <Engine/Unit/Components/AgilityComponent.hpp>
 #include <Engine/Unit/Components/RangeComponent.hpp>
@@ -31,9 +31,7 @@ namespace sw::engine
 
 	std::shared_ptr<IAction> ActionFactory::createAttack(std::shared_ptr<IUnit> unit, Map& map)
 	{
-		bool hasRangeAttack = unit->getComponent<RangeAttackComponent>() != nullptr;
 		bool hasMeleeAttack = unit->getComponent<MeleeAttackComponent>() != nullptr;
-
 		if (hasMeleeAttack)
 		{
 			auto target = map.getRandomAdjacentUnit(unit->getPosition());
@@ -41,6 +39,7 @@ namespace sw::engine
 				return std::make_shared<MeleeAttackAction>(target, unit->getComponent<StrengthComponent>()->getStrength());
 		}
 
+		bool hasRangeAttack = unit->getComponent<RangeAttackComponent>() != nullptr;
 		if (hasRangeAttack)
 		{
 			auto target = map.findUnitInRange(unit, map, 2, unit->getComponent<RangeComponent>()->getRange());

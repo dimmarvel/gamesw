@@ -1,6 +1,6 @@
 #pragma once
 #include "IAction.hpp"
-#include <Engine/Position.hpp>
+#include <Engine/Core/Position.hpp>
 
 namespace sw::engine
 {
@@ -17,7 +17,7 @@ namespace sw::engine
 	 * 
 	 * @see IAction
 	 */
-	class MoveAction : public IAction
+	class MoveAction final : public IAction
 	{
 	private:
 		Position targetPos;

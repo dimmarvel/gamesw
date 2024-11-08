@@ -14,10 +14,10 @@
 #include <IO/System/PrintDebug.hpp>
 #include <fstream>
 #include <iostream>
-#include <Engine/Map.hpp>
-#include <Engine/GameObserver.hpp>
+#include <Engine/Core/Map.hpp>
+#include <Engine/Core/GameObserver.hpp>
 #include <Engine/Renderer/TextRenderer.hpp>
-#include <Engine/Settings.hpp>
+#include <Engine/Core/Settings.hpp>
 
 int main(int argc, char** argv)
 {

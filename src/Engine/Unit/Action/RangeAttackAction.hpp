@@ -5,7 +5,7 @@ namespace sw::engine
 {
 	class Map;
 
-	class RangeAttackAction : public IAttackAction {
+	class RangeAttackAction final : public IAttackAction {
 	public:
 		explicit RangeAttackAction(std::shared_ptr<IUnit> target, uint32_t dmg);
 

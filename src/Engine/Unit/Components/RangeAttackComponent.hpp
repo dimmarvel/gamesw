@@ -3,7 +3,7 @@
 
 namespace sw::engine
 {
-	class RangeAttackComponent : public IComponent {
+	class RangeAttackComponent final : public IComponent {
 	public:
 		explicit RangeAttackComponent() {}
 	};

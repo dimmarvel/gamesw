@@ -4,7 +4,7 @@
 
 namespace sw::engine
 {
-	class RangeComponent : public IComponent {
+	class RangeComponent final : public IComponent {
 	private:
 		int range;
 

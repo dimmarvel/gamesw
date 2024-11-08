@@ -21,7 +21,8 @@ namespace sw::engine
 	 * allowing each unit to execute actions in sequence. It also facilitates 
 	 * the addition, removal, and processing of actions for each unit.
 	 */
-	class ActionManager {
+	class ActionManager final
+	{
 		using ActionQueue = std::queue<std::shared_ptr<IAction>>;
 		using UnitActionsMap = std::unordered_map<std::shared_ptr<IUnit>, ActionQueue>;
 

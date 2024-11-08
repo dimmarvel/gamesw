@@ -1,6 +1,6 @@
 #include "HealthComponent.hpp"
 
-#include <Engine/GameObserver.hpp>
+#include <Engine/Core/GameObserver.hpp>
 
 #include <IO/Events/UnitDied.hpp>
 #include <IO/System/EventLog.hpp>

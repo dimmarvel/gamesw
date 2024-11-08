@@ -47,7 +47,7 @@ namespace sw::engine
 		 * @param map The game map, which may influence the action's outcome (e.g., checking line of sight).
 		 * @return `true` if the attack was successfully executed, `false` otherwise.
 		 */
-		virtual bool execute(std::shared_ptr<IUnit> unit, Map& map) = 0;
+		virtual bool execute(std::shared_ptr<IUnit> unit, Map& map) override = 0;
 
 		/**
 		 * @brief Gets the type of action (AttackAction).
