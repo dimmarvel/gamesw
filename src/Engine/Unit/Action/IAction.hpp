@@ -27,6 +27,8 @@ namespace sw::engine
 	class IAction
 	{
 	public:
+		virtual ~IAction() = default;
+
 		/**
 		 * @brief Executes the action for a given unit.
 		 * This pure virtual function defines the general behavior of an action. Each derived action class
@@ -50,6 +52,5 @@ namespace sw::engine
 		 * The virtual destructor ensures that derived class destructors are called properly when deleting
 		 * an instance of a derived class through a pointer to IAction.
 		 */
-		virtual ~IAction() = default;
 	};
 }

@@ -59,7 +59,7 @@ namespace sw::engine
 			std::cout << "Tik: " << Tick::get().incrementTick() << std::endl;
 
 			actionManager.processActions(map);
-			if (checkGameEnd() || actionManager.isAllActionsCompleted())
+			if (isGameEnd())
 			{
 				renderer->renderMap(map);
 				std::cout << "Game Is Over!" << std::endl;
@@ -86,7 +86,6 @@ namespace sw::engine
 						UnitFactory::createSwordsman(
 							command.unitId, Position(command.x, command.y), command.hp, command.strength));
 					printDebug(std::cout, command);
-					EventLog::get().log(io::UnitSpawned{command.unitId, "Swordsman", command.x, command.y});
 				})
 			.add<io::SpawnHunter>(
 				[this](auto command)
@@ -100,7 +99,6 @@ namespace sw::engine
 							command.strength,
 							command.range));
 					printDebug(std::cout, command);
-					EventLog::get().log(io::UnitSpawned{command.unitId, "Hunter", command.x, command.y});
 				})
 			.add<io::March>(
 				[this](auto command)
@@ -112,8 +110,8 @@ namespace sw::engine
 		parser.parse(settings.file);
 	}
 
-	bool GameObserver::checkGameEnd()
+	bool GameObserver::isGameEnd()
 	{
-		return units.size() <= 1;
+		return (units.size() <= 1) || (actionManager.isAllActionsCompleted());
 	}
 }

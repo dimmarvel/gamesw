@@ -87,6 +87,6 @@ namespace sw::engine
 		 * 
 		 * @return `true` if the game has ended, `false` otherwise.
 		 */
-		bool checkGameEnd();
+		bool isGameEnd();
 	};
 }

@@ -99,14 +99,18 @@ namespace sw::engine
 		{
 			for (int dy = -1; dy <= 1; ++dy)
 			{
-				// Skip current position and outsidemap positions
-				if (dx == 0 && dy == 0 || pos.getX() >= 0 && pos.getY() >= 0)
+				// Skip current position
+				if (dx == 0 && dy == 0)
 				{
 					continue;
 				}
 				Position adjacent(pos.getX() + dx, pos.getY() + dy);
+				if(!isWithinBounds(adjacent))
+				{
+					continue;
+				}
 				auto adjUnit = getUnitAt(adjacent);
-				if (isWithinBounds(adjacent) && (adjUnit != nullptr))
+				if (adjUnit != nullptr)
 				{
 					adjacentUnits.push_back(adjUnit);
 				}

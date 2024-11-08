@@ -5,6 +5,8 @@
 #include <Engine/Unit/Action/ActionFactory.hpp>
 #include <Engine/Unit/Action/MoveAction.hpp>
 #include <Engine/Unit/IUnit.hpp>
+#include <Engine/Core/Utils.hpp>
+#include <iostream>
 
 namespace sw::engine
 {
@@ -67,7 +69,8 @@ namespace sw::engine
 
 	bool ActionManager::removeUnit(std::shared_ptr<IUnit> unit)
 	{
-		return std::erase(unitOrder, unit) > 0;
+		unitActions.erase(unit);
+		return std::erase(unitOrder, unit) > 0 && unitActions.count(unit) == 0;
 	}
 
 	void ActionManager::incrementNextUnit()

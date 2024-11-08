@@ -16,7 +16,7 @@ namespace sw::engine
 		{
 			return false;
 		}
-		EventLog::get().log(io::UnitDied{id});
+		EventLog::get().log(io::UnitDied{health});
 		return true;
 	}
 

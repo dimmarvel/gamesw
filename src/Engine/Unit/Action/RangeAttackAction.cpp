@@ -26,7 +26,7 @@ namespace sw::engine
 				static_cast<uint32_t>(healthComponent->getHealth()),
 				utils::to_string(getType())});
 
-		if (healthComponent->isAlive())
+		if (!healthComponent->isAlive())
 		{
 			healthComponent->processUnitDeath(attackTarget->getId(), map.getGameObserver());
 		}
