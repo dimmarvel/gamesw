@@ -3,7 +3,8 @@
 
 namespace sw::engine
 {
-	class MeleeAttackComponent final : public IComponent {
+	class MeleeAttackComponent final : public IComponent
+	{
 	public:
 		explicit MeleeAttackComponent() {}
 	};

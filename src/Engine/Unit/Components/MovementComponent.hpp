@@ -1,7 +1,8 @@
 #pragma once
 #include "IComponent.hpp"
-#include <Engine/Unit/IUnit.hpp>
+
 #include <Engine/Core/Position.hpp>
+#include <Engine/Unit/IUnit.hpp>
 #include <memory>
 
 namespace sw::engine
@@ -14,7 +15,7 @@ namespace sw::engine
 	 * It tracks the current position of the unit and whether the unit is allowed to move.
 	 * The component allows updating the unit's position and checking if it is movable.
 	 */
-	class MovementComponent final : public IComponent 
+	class MovementComponent final : public IComponent
 	{
 	private:
 		Position currPosition;
@@ -28,8 +29,8 @@ namespace sw::engine
 		 * @param canMove Boolean flag indicating if the unit can move. Default is `true`.
 		 */
 		MovementComponent(const Position& pos, bool canMove = true) :
-			currPosition(pos),
-			movable(canMove)
+				currPosition(pos),
+				movable(canMove)
 		{}
 
 		/**
@@ -40,7 +41,7 @@ namespace sw::engine
 		 * @param canMove Boolean flag indicating if the unit can move. Default is `true`.
 		 */
 		MovementComponent(int x, int y, bool canMove = true) :
-			currPosition(x, y)
+				currPosition(x, y)
 		{}
 
 		/**
@@ -51,10 +52,19 @@ namespace sw::engine
 		 * @param deltaX The change in the x-coordinate.
 		 * @param deltaY The change in the y-coordinate.
 		 */
-		void move(int deltaX, int deltaY) { currPosition.move(deltaX, deltaY); }
+		void move(int deltaX, int deltaY)
+		{
+			currPosition.move(deltaX, deltaY);
+		}
 
-		inline Position getPosition() const noexcept{ return currPosition; }
-		inline bool isMovable() const noexcept{ return movable; }
+		inline Position getPosition() const noexcept
+		{
+			return currPosition;
+		}
 
+		inline bool isMovable() const noexcept
+		{
+			return movable;
+		}
 	};
 }

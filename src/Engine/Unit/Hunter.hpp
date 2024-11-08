@@ -14,7 +14,8 @@ namespace sw::engine
 	 * 
 	 * @see IUnit
 	 */
-	class Hunter final : public IUnit {
+	class Hunter final : public IUnit
+	{
 	public:
 		Hunter(size_t id, Position pos, int health, int agility, int strenght, int range);
 
@@ -27,7 +28,7 @@ namespace sw::engine
 		 * @return The amount of damage dealt in a melee attack.
 		 */
 		uint32_t meleeDamage();
-		
+
 		Position getPosition();
 		/**
 		 * @brief Performs a ranged attack on the target unit.

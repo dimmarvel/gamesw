@@ -1,16 +1,16 @@
 #include "ActionFactory.hpp"
 
-#include "MoveAction.hpp"
 #include "MeleeAttackAction.hpp"
+#include "MoveAction.hpp"
 #include "RangeAttackAction.hpp"
 
 #include <Engine/Core/Map.hpp>
 #include <Engine/Core/Position.hpp>
-#include <Engine/Unit/Components/StrengthComponent.hpp>
 #include <Engine/Unit/Components/AgilityComponent.hpp>
-#include <Engine/Unit/Components/RangeComponent.hpp>
-#include <Engine/Unit/Components/RangeAttackComponent.hpp>
 #include <Engine/Unit/Components/MeleeAttackComponent.hpp>
+#include <Engine/Unit/Components/RangeAttackComponent.hpp>
+#include <Engine/Unit/Components/RangeComponent.hpp>
+#include <Engine/Unit/Components/StrengthComponent.hpp>
 
 namespace sw::engine
 {
@@ -36,7 +36,10 @@ namespace sw::engine
 		{
 			auto target = map.getRandomAdjacentUnit(unit->getPosition());
 			if (target)
-				return std::make_shared<MeleeAttackAction>(target, unit->getComponent<StrengthComponent>()->getStrength());
+			{
+				return std::make_shared<MeleeAttackAction>(
+					target, unit->getComponent<StrengthComponent>()->getStrength());
+			}
 		}
 
 		bool hasRangeAttack = unit->getComponent<RangeAttackComponent>() != nullptr;
@@ -44,7 +47,10 @@ namespace sw::engine
 		{
 			auto target = map.findUnitInRange(unit, map, 2, unit->getComponent<RangeComponent>()->getRange());
 			if (target)
-				return std::make_shared<RangeAttackAction>(target, unit->getComponent<AgilityComponent>()->getAgility());
+			{
+				return std::make_shared<RangeAttackAction>(
+					target, unit->getComponent<AgilityComponent>()->getAgility());
+			}
 		}
 
 		return nullptr;

@@ -20,21 +20,27 @@ namespace sw::engine
 		Tick(const Tick&) = delete;
 		Tick& operator=(const Tick&) = delete;
 
-		static Tick& get() {
+		static Tick& get()
+		{
 			static Tick instance;
 			return instance;
 		}
 
-		uint64_t getTick() const {
+		uint64_t getTick() const
+		{
 			return tick.load(std::memory_order_relaxed);
 		}
 
-		uint64_t incrementTick() {
+		uint64_t incrementTick()
+		{
 			return tick.fetch_add(1, std::memory_order_relaxed);
 		}
 
 	private:
-		Tick() : tick(0) {}
+		Tick() :
+				tick(0)
+		{}
+
 		std::atomic<uint64_t> tick;
 	};
 }

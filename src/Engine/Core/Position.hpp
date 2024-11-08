@@ -19,10 +19,15 @@ namespace sw::engine
 
 	public:
 		Position() = default;
-		Position(int x, int y) : x(x), y(y) {}
+
+		Position(int x, int y) :
+				x(x),
+				y(y)
+		{}
+
 		Position(const Position& other) = default;
 		Position(Position&& other) noexcept = default;
-		
+
 		Position& operator=(const Position& other) = default;
 		Position& operator=(Position&& other) noexcept = default;
 
@@ -33,11 +38,25 @@ namespace sw::engine
 			return x == other.x && y == other.y;
 		}
 
-		inline int getX() const noexcept { return x; }
-		inline int getY() const noexcept { return y; }
+		inline int getX() const noexcept
+		{
+			return x;
+		}
 
-		void setX(int newX) { x = newX; }
-		void setY(int newY) { y = newY; }
+		inline int getY() const noexcept
+		{
+			return y;
+		}
+
+		void setX(int newX)
+		{
+			x = newX;
+		}
+
+		void setY(int newY)
+		{
+			y = newY;
+		}
 
 		void move(int deltaX, int deltaY)
 		{

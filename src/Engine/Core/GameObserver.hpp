@@ -1,11 +1,10 @@
 #pragma once
-#include <thread>
-#include <memory>
+#include "Map.hpp"
 
 #include <Engine/Unit/Action/ActoinManager.hpp>
 #include <IO/System/CommandParser.hpp>
-
-#include "Map.hpp"
+#include <memory>
+#include <thread>
 
 namespace sw::engine
 {
@@ -14,6 +13,7 @@ namespace sw::engine
 	class Settings;
 
 	using UnitsMap = std::unordered_map<unitId, std::shared_ptr<IUnit>>;
+
 	/**
 	 * @class GameObserver
 	 * @brief Manages the game state, including units, map, and actions.
@@ -50,7 +50,7 @@ namespace sw::engine
 		 */
 		void addUnit(std::shared_ptr<IUnit> unit);
 
-		 /**
+		/**
 		 * @brief Removes a unit from the game.
 		 * Unregisters the unit from the `ActionManager`, removes it from the map, and deletes it from the unit list.
 		 * @param id The unique ID of the unit to remove.

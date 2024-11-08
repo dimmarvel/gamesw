@@ -1,10 +1,9 @@
 #pragma once
 #include <Engine/Unit/Components/IComponent.hpp>
 #include <Engine/Unit/Components/MovementComponent.hpp>
-
-#include <unordered_map>
-#include <typeindex>
 #include <memory>
+#include <typeindex>
+#include <unordered_map>
 #include <vector>
 
 namespace sw::engine
@@ -16,6 +15,7 @@ namespace sw::engine
 	using ComponentMap = std::unordered_map<ComponentType, std::vector<std::shared_ptr<IComponent>>>;
 	using unitId = uint32_t;
 	using unitPtrVec = std::vector<std::shared_ptr<IUnit>>;
+
 	/**
 	 * @class IUnit
 	 * @brief Interface representing a game unit with components and a unique ID.
@@ -44,7 +44,7 @@ namespace sw::engine
 		 * This method constructs a new component of type `ComponentT` with the given arguments
 		 * and adds it to the unit's component map.
 		 */
-		template<typename ComponentT, typename... Args>
+		template <typename ComponentT, typename... Args>
 		void addComponent(Args&&... args)
 		{
 			components[typeid(ComponentT)].push_back(std::make_shared<ComponentT>(std::forward<Args>(args)...));
@@ -55,11 +55,11 @@ namespace sw::engine
 		 * @tparam ComponentT The type of component to retrieve.
 		 * @return A shared pointer to the first component of type `ComponentT`, or `nullptr` if not found.
 		 */
-		template<typename ComponentT>
-		std::shared_ptr<ComponentT> getComponent() 
+		template <typename ComponentT>
+		std::shared_ptr<ComponentT> getComponent()
 		{
 			auto it = components.find(typeid(ComponentT));
-			if (it != components.end()) 
+			if (it != components.end())
 			{
 				return std::dynamic_pointer_cast<ComponentT>(it->second.at(0));
 			}
@@ -71,19 +71,26 @@ namespace sw::engine
 		 * @tparam ComponentT The type of components to retrieve.
 		 * @return A vector of shared pointers to all components of type `ComponentT`, or an empty vector if none found.
 		 */
-		template<typename ComponentT>
-		std::shared_ptr<ComponentT> getAllComponents() 
+		template <typename ComponentT>
+		std::shared_ptr<ComponentT> getAllComponents()
 		{
 			auto it = components.find(typeid(ComponentT));
-			if (it != components.end()) 
+			if (it != components.end())
 			{
 				return std::dynamic_pointer_cast<ComponentT>(it->second);
 			}
 			return nullptr;
 		}
 
-		inline unitId getId() const noexcept { return _id; }
-		inline void setId(unitId id) noexcept { _id = id; }
+		inline unitId getId() const noexcept
+		{
+			return _id;
+		}
+
+		inline void setId(unitId id) noexcept
+		{
+			_id = id;
+		}
 
 		/**
 		 * @brief Checks if the unit is movable.

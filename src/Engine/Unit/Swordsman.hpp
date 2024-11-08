@@ -13,7 +13,8 @@ namespace sw::engine
 	 * 
 	 * @see IUnit
 	 */
-	class Swordsman final : public IUnit {
+	class Swordsman final : public IUnit
+	{
 	public:
 		Swordsman(size_t id, Position pos, int hp, int strenght);
 

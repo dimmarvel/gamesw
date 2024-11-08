@@ -1,17 +1,20 @@
 #include "ActoinManager.hpp"
+
 #include "IAction.hpp"
 
-#include <Engine/Unit/IUnit.hpp>
 #include <Engine/Unit/Action/ActionFactory.hpp>
 #include <Engine/Unit/Action/MoveAction.hpp>
+#include <Engine/Unit/IUnit.hpp>
 
 namespace sw::engine
 {
 	void ActionManager::registerUnit(std::shared_ptr<IUnit> unit)
 	{
 		auto actionIt = unitActions.find(unit);
-		if(actionIt != unitActions.end())
+		if (actionIt != unitActions.end())
+		{
 			throw std::runtime_error("Unit already registered in ActionManager");
+		}
 
 		unitActions[unit] = std::queue<std::shared_ptr<IAction>>();
 		unitOrder.push_back(unit);
@@ -20,8 +23,10 @@ namespace sw::engine
 	void ActionManager::addAction(std::shared_ptr<IUnit> unit, std::shared_ptr<IAction> action)
 	{
 		auto unitIt = unitActions.find(unit);
-		if(unitIt == unitActions.end())
+		if (unitIt == unitActions.end())
+		{
 			throw std::runtime_error("Unit has not been registered");
+		}
 
 		unitActions[unit].push(action);
 	}
@@ -31,7 +36,9 @@ namespace sw::engine
 		do
 		{
 			if (unitOrder.empty())
+			{
 				return;
+			}
 
 			std::shared_ptr<IUnit> unit = unitOrder[currentIndex];
 
@@ -42,13 +49,19 @@ namespace sw::engine
 			}
 
 			incrementNextUnit();
-		} while (currentIndex != 0);
+		}
+		while (currentIndex != 0);
 	}
 
 	bool ActionManager::isAllActionsCompleted() const
 	{
 		for (const auto& [unit, actions] : unitActions)
-			if (!actions.empty()) return false;
+		{
+			if (!actions.empty())
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -64,24 +77,30 @@ namespace sw::engine
 
 	void ActionManager::handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action)
 	{
-			if(action->getType() == ActionType::MoveAction)
+		if (action->getType() == ActionType::MoveAction)
+		{
+			if (handleAttack(unit, map))
 			{
-				if(handleAttack(unit, map))
-					return;
-
-				auto moveAction = std::static_pointer_cast<MoveAction>(action);
-				if(handleMove(unit, map, moveAction))
-					return;
+				return;
 			}
+
+			auto moveAction = std::static_pointer_cast<MoveAction>(action);
+			if (handleMove(unit, map, moveAction))
+			{
+				return;
+			}
+		}
 	}
 
 	bool ActionManager::handleAttack(std::shared_ptr<IUnit> unit, Map& map)
 	{
 		auto attackAction = ActionFactory::createAttack(unit, map);
-		if(attackAction)
+		if (attackAction)
 		{
-			if(attackAction->execute(unit, map))
+			if (attackAction->execute(unit, map))
+			{
 				return true;
+			}
 		}
 		return false;
 	}
@@ -90,8 +109,10 @@ namespace sw::engine
 	{
 		if (moveAction->execute(unit, map))
 		{
-			if(unit->getPosition() == moveAction->getTargetPosition())
+			if (unit->getPosition() == moveAction->getTargetPosition())
+			{
 				unitActions[unit].pop();
+			}
 			return true;
 		}
 		return false;

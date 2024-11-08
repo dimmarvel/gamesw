@@ -6,7 +6,7 @@ namespace sw::engine
 {
 	class Map;
 
-	enum class ActionType 
+	enum class ActionType
 	{
 		AttackAction,
 		MeleeAttackAction,
@@ -24,7 +24,7 @@ namespace sw::engine
 	 * It allows for polymorphic behavior, enabling units to perform various types of actions without needing 
 	 * to know the specifics of each action type.
 	 */
-	class IAction 
+	class IAction
 	{
 	public:
 		/**

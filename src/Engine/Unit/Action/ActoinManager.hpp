@@ -1,9 +1,9 @@
 #pragma once
+#include <algorithm>
 #include <memory>
+#include <queue>
 #include <unordered_map>
 #include <vector>
-#include <queue>
-#include <algorithm>
 
 namespace sw::engine
 {
@@ -29,7 +29,7 @@ namespace sw::engine
 	private:
 		UnitActionsMap unitActions;
 		std::vector<std::shared_ptr<IUnit>> unitOrder;
-		size_t currentIndex{0}; 
+		size_t currentIndex{0};
 
 	public:
 		/**

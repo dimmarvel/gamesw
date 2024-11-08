@@ -1,11 +1,11 @@
 #include "Hunter.hpp"
 
-#include "Components/StrengthComponent.hpp"
 #include "Components/AgilityComponent.hpp"
-#include "Components/RangeComponent.hpp"
 #include "Components/HealthComponent.hpp"
 #include "Components/MeleeAttackComponent.hpp"
 #include "Components/RangeAttackComponent.hpp"
+#include "Components/RangeComponent.hpp"
+#include "Components/StrengthComponent.hpp"
 
 namespace sw::engine
 {
@@ -35,21 +35,29 @@ namespace sw::engine
 	{
 		auto rangeComp = getComponent<RangeComponent>();
 		if (!rangeComp)
+		{
 			throw std::runtime_error("For Hunter, RangeComponent doesnt exist");
+		}
 		auto targetHealth = target.getComponent<HealthComponent>();
 
 		if (targetHealth)
+		{
 			targetHealth->takeDamage(meleeDamage());
+		}
 	}
 
 	void Hunter::meleeAttack(IUnit& target)
 	{
 		auto rangeComp = getComponent<RangeComponent>();
 		if (!rangeComp)
+		{
 			throw std::runtime_error("For Hunter, RangeComponent doesnt exist");
+		}
 
 		auto targetHealth = target.getComponent<HealthComponent>();
-		if (targetHealth) 
+		if (targetHealth)
+		{
 			targetHealth->takeDamage(getComponent<AgilityComponent>()->getAgility());
+		}
 	}
 }

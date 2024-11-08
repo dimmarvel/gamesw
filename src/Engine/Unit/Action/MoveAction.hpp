@@ -1,5 +1,6 @@
 #pragma once
 #include "IAction.hpp"
+
 #include <Engine/Core/Position.hpp>
 
 namespace sw::engine
@@ -26,7 +27,10 @@ namespace sw::engine
 		MoveAction(Position target);
 		virtual ~MoveAction() = default;
 
-		virtual ActionType getType() const override { return ActionType::MoveAction; }
+		virtual ActionType getType() const override
+		{
+			return ActionType::MoveAction;
+		}
 
 		/**
 		 * @brief Executes the move action.
@@ -47,7 +51,10 @@ namespace sw::engine
 		 *
 		 * @return The target position of the move action.
 		 */
-		inline Position getTargetPosition() const noexcept { return targetPos; }
+		inline Position getTargetPosition() const noexcept
+		{
+			return targetPos;
+		}
 
 	private:
 		/**

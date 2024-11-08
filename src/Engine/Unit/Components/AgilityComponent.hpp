@@ -1,6 +1,6 @@
 #pragma once
-#include "IComponent.hpp"
 #include "HealthComponent.hpp"
+#include "IComponent.hpp"
 
 namespace sw::engine
 {
@@ -10,8 +10,13 @@ namespace sw::engine
 		int agility;
 
 	public:
+		AgilityComponent(int agil) :
+				agility(agil)
+		{}
 
-		AgilityComponent(int agil) : agility(agil) {}
-		inline int getAgility() const noexcept { return agility; }
+		inline int getAgility() const noexcept
+		{
+			return agility;
+		}
 	};
 }

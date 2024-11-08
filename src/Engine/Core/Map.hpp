@@ -1,12 +1,12 @@
 #pragma once
-#include <vector>
+#include "Position.hpp"
+
+#include <Engine/Unit/IUnit.hpp>
 #include <cstdint>
-#include <unordered_map>
 #include <memory>
 #include <optional>
-
-#include "Position.hpp"
-#include <Engine/Unit/IUnit.hpp>
+#include <unordered_map>
+#include <vector>
 
 namespace sw::engine
 {
@@ -26,30 +26,56 @@ namespace sw::engine
 		 * @brief Checks if the cell is empty (i.e., has no unit).
 		 * @return True if the cell is empty, false otherwise.
 		 */
-		bool isEmpty() const { return unit == nullptr; }
-		
+		bool isEmpty() const
+		{
+			return unit == nullptr;
+		}
+
 		/**
 		 * @brief Places a unit in the cell.
 		 * @param newUnit A shared pointer to the unit to place in the cell.
 		 */
-		void placeUnit(std::shared_ptr<IUnit> newUnit) { unit = newUnit; }
+		void placeUnit(std::shared_ptr<IUnit> newUnit)
+		{
+			unit = newUnit;
+		}
 
 		/**
 		 * @brief Removes the unit from the cell, making it empty.
 		 */
-		void removeUnit() { unit.reset(); }
+		void removeUnit()
+		{
+			unit.reset();
+		}
 
 		/**
 		 * @brief Retrieves the unit currently in the cell.
 		 * @return A shared pointer to the unit in the cell, or nullptr if the cell is empty.
 		 */
-		inline std::shared_ptr<IUnit> getUnit() const noexcept { return unit; }
-		
-		inline int getX() const noexcept { return pos.getX(); }
-		inline int getY() const noexcept { return pos.getY(); }
+		inline std::shared_ptr<IUnit> getUnit() const noexcept
+		{
+			return unit;
+		}
 
-		inline Position getPosition() const noexcept { return pos; }
-		inline void setPosition(Position pos) noexcept { pos = pos; }
+		inline int getX() const noexcept
+		{
+			return pos.getX();
+		}
+
+		inline int getY() const noexcept
+		{
+			return pos.getY();
+		}
+
+		inline Position getPosition() const noexcept
+		{
+			return pos;
+		}
+
+		inline void setPosition(Position pos) noexcept
+		{
+			pos = pos;
+		}
 
 	private:
 		std::shared_ptr<IUnit> unit;
@@ -69,10 +95,20 @@ namespace sw::engine
 		Map& operator=(const Map& other);
 		~Map() = default;
 
-		std::shared_ptr<GameObserver> getGameObserver() { return gameObserver; }
+		std::shared_ptr<GameObserver> getGameObserver()
+		{
+			return gameObserver;
+		}
 
-		inline int getSizeX() const noexcept { return cells.size(); }
-		inline int getSizeY() const noexcept { return cells.at(0).size(); }
+		inline int getSizeX() const noexcept
+		{
+			return cells.size();
+		}
+
+		inline int getSizeY() const noexcept
+		{
+			return cells.at(0).size();
+		}
 
 		/**
 		 * @brief Retrieves the content of a cell at specified coordinates.
@@ -145,8 +181,9 @@ namespace sw::engine
 		 * @param maxRange The maximum search range.
 		 * @return A shared pointer to a unit found within the specified range.
 		 */
-		std::shared_ptr<IUnit> findUnitInRange(std::shared_ptr<IUnit> unit, Map& map, uint32_t minRange, uint32_t maxRange);
-		
+		std::shared_ptr<IUnit> findUnitInRange(
+			std::shared_ptr<IUnit> unit, Map& map, uint32_t minRange, uint32_t maxRange);
+
 		/**
 		 * @brief Checks if a position is within the bounds of the map.
 		 * @param pos The position to check.

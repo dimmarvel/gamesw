@@ -3,6 +3,7 @@
 namespace sw::engine
 {
 	class Map;
+
 	/**
 	 * @class IRenderer
 	 * @brief An abstract base class for rendering map data.

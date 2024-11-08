@@ -2,7 +2,8 @@
 
 namespace sw::engine
 {
-	class IComponent {
+	class IComponent
+	{
 	public:
 		virtual ~IComponent() = default;
 	};

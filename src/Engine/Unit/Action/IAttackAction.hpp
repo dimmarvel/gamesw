@@ -1,6 +1,7 @@
 #pragma once
-#include <Engine/Unit/IUnit.hpp>
 #include "IAction.hpp"
+
+#include <Engine/Unit/IUnit.hpp>
 
 namespace sw::engine
 {
@@ -30,8 +31,8 @@ namespace sw::engine
 		 * @param dmg The amount of damage to deal to the target unit.
 		 */
 		IAttackAction(std::shared_ptr<IUnit> target, uint32_t dmg) :
-			attackTarget(target),
-			damage(dmg) 
+				attackTarget(target),
+				damage(dmg)
 		{}
 
 		virtual ~IAttackAction() = default;
@@ -57,7 +58,10 @@ namespace sw::engine
 		 *
 		 * @return The action type as `ActionType::AttackAction`.
 		 */
-		virtual ActionType getType() const override{ return ActionType::AttackAction; }
+		virtual ActionType getType() const override
+		{
+			return ActionType::AttackAction;
+		}
 
 		/**
 		 * @brief Gets the target unit of the attack.
@@ -66,7 +70,10 @@ namespace sw::engine
 		 *
 		 * @return A shared pointer to the target unit.
 		 */
-		inline std::shared_ptr<IUnit> getTarget() noexcept { return attackTarget; }
+		inline std::shared_ptr<IUnit> getTarget() noexcept
+		{
+			return attackTarget;
+		}
 
 		/**
 		 * @brief Gets the damage dealt by the attack.
@@ -75,6 +82,9 @@ namespace sw::engine
 		 *
 		 * @return The amount of damage to be dealt.
 		 */
-		inline uint32_t getDamage() const noexcept { return damage; }
+		inline uint32_t getDamage() const noexcept
+		{
+			return damage;
+		}
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IComponent.hpp"
+
 #include <Engine/Unit/IUnit.hpp>
 #include <memory>
 
@@ -18,7 +19,7 @@ namespace sw::engine
 	 * 
 	 * @see IComponent
 	 */
-	class HealthComponent final : public IComponent 
+	class HealthComponent final : public IComponent
 	{
 	private:
 		int health;
@@ -56,6 +57,9 @@ namespace sw::engine
 		 */
 		bool isAlive();
 
-		inline int getHealth() const noexcept{ return health; }
+		inline int getHealth() const noexcept
+		{
+			return health;
+		}
 	};
 }
