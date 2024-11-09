@@ -16,7 +16,7 @@ namespace sw::engine
 		{
 			return false;
 		}
-		EventLog::get().log(io::UnitDied{health});
+		EventLog::get().log(io::UnitDied{static_cast<uint32_t>(health)});
 		return true;
 	}
 

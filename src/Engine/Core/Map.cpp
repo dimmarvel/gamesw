@@ -83,7 +83,11 @@ namespace sw::engine
 
 		if (cellUnit->getId() != unit->getId())
 		{
-			throw std::runtime_error("Attempt to move another unit into position");
+			// TODO: should move to C++20 and use std::format :)
+			throw std::runtime_error(
+				std::string("Attempt to move unit with ID=") + std::to_string(unit->getId()) + " at position ("
+				+ std::to_string(unit->getPosition().getX()) + ", " + std::to_string(unit->getPosition().getY())
+				+ "), but cell is occupied by unit with ID=" + std::to_string(cellUnit->getId()));
 		}
 
 		auto cell = getCellContent(unit->getPosition());
@@ -105,7 +109,7 @@ namespace sw::engine
 					continue;
 				}
 				Position adjacent(pos.getX() + dx, pos.getY() + dy);
-				if(!isWithinBounds(adjacent))
+				if (!isWithinBounds(adjacent))
 				{
 					continue;
 				}

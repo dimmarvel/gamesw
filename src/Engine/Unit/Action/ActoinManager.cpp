@@ -5,8 +5,6 @@
 #include <Engine/Unit/Action/ActionFactory.hpp>
 #include <Engine/Unit/Action/MoveAction.hpp>
 #include <Engine/Unit/IUnit.hpp>
-#include <Engine/Core/Utils.hpp>
-#include <iostream>
 
 namespace sw::engine
 {
