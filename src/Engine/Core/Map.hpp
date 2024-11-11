@@ -174,14 +174,14 @@ namespace sw::engine
 		std::shared_ptr<IUnit> getUnitAt(const Position& pos);
 
 		/**
-		 * @brief Finds a unit within a specified range from another unit.
+		 * @brief Finds a Random unit within a specified range from another unit.
 		 * @param unit The unit from which to measure the range.
 		 * @param map The map where the unit is located.
 		 * @param minRange The minimum search range.
 		 * @param maxRange The maximum search range.
 		 * @return A shared pointer to a unit found within the specified range.
 		 */
-		std::shared_ptr<IUnit> findUnitInRange(
+		std::shared_ptr<IUnit> findRandomUnitInRange(
 			std::shared_ptr<IUnit> unit, Map& map, uint32_t minRange, uint32_t maxRange);
 
 		/**

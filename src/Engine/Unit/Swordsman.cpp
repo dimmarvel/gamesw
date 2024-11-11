@@ -13,6 +13,7 @@ namespace sw::engine
 	Swordsman::Swordsman(size_t id, Position pos, int hp, int strenght)
 	{
 		setId(id);
+		setType(UnitType::Swordsman);
 		addComponent<HealthComponent>(hp);
 		addComponent<StrengthComponent>(strenght);
 		addComponent<MovementComponent>(pos);

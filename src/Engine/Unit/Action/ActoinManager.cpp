@@ -5,6 +5,7 @@
 #include <Engine/Unit/Action/ActionFactory.hpp>
 #include <Engine/Unit/Action/MoveAction.hpp>
 #include <Engine/Unit/IUnit.hpp>
+#include <Engine/Unit/Components/HealingComponent.hpp>
 
 namespace sw::engine
 {
@@ -25,7 +26,7 @@ namespace sw::engine
 		auto unitIt = unitActions.find(unit);
 		if (unitIt == unitActions.end())
 		{
-			throw std::runtime_error("Unit has not been registered");
+			throw std::runtime_error("Unit " + std::to_string(unit->getId()) +" has not been registered");
 		}
 
 		unitActions[unit].push(action);
@@ -78,36 +79,68 @@ namespace sw::engine
 
 	void ActionManager::handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action)
 	{
-		if (action->getType() == ActionType::MoveAction)
+		switch(unit->getType())
 		{
-			if (handleAttack(unit, map))
+			case UnitType::Hunter:
 			{
-				return;
+				if(handleAttack(unit, map))
+					return;
+				break;
 			}
-
-			auto moveAction = std::static_pointer_cast<MoveAction>(action);
-			if (handleMove(unit, map, moveAction))
+			case UnitType::Swordsman:
 			{
-				return;
+				if(handleAttack(unit, map))
+					return;
+				break;
 			}
+			case UnitType::Heal:
+			{
+				if(handleHealing(unit, map))
+					return;
+				break;
+			}
+			default:
+				std::runtime_error("Handle unknown action");
 		}
+
+		handleMove(unit, map, action);
+	}
+
+	bool ActionManager::handleHealing(std::shared_ptr<IUnit> unit, Map& map)
+	{
+		auto healComponent = unit->getComponent<HealingComponent>();
+		if(!healComponent)
+			return false;
+
+		auto healingAction = ActionFactory::createHeal(unit, map, healComponent->getSpirit());
+		if(!healingAction)
+			return false;
+
+		if (healingAction->execute(unit, map))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	bool ActionManager::handleAttack(std::shared_ptr<IUnit> unit, Map& map)
 	{
 		auto attackAction = ActionFactory::createAttack(unit, map);
-		if (attackAction)
-		{
-			if (attackAction->execute(unit, map))
-			{
-				return true;
-			}
-		}
+		if (!attackAction)
+			return false;
+
+		if (attackAction->execute(unit, map))
+			return true;
 		return false;
 	}
 
-	bool ActionManager::handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<MoveAction> moveAction)
+	bool ActionManager::handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action)
 	{
+		auto moveAction = std::dynamic_pointer_cast<MoveAction>(action);
+		if(!moveAction)
+			return false;
+
 		if (moveAction->execute(unit, map))
 		{
 			if (unit->getPosition() == moveAction->getTargetPosition())

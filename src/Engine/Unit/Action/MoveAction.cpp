@@ -15,7 +15,7 @@ namespace sw::engine
 
 	bool MoveAction::execute(std::shared_ptr<IUnit> unit, Map& map)
 	{
-		if (targetPos.getX() >= map.getSizeX() || targetPos.getY() >= map.getSizeY())
+		if (targetPos.getX() > map.getSizeX() || targetPos.getY() > map.getSizeY())
 		{
 			throw std::runtime_error("Target MoveAction out of range");
 		}
@@ -32,7 +32,7 @@ namespace sw::engine
 
 	Position MoveAction::calcNewPosition(std::shared_ptr<IUnit> unit, const Map& map) const
 	{
-		if (targetPos.getX() >= map.getSizeX() || targetPos.getY() >= map.getSizeY())
+		if (targetPos.getX() > map.getSizeX() || targetPos.getY() > map.getSizeY())
 		{
 			throw std::runtime_error("Target MoveAction out of range");
 		}

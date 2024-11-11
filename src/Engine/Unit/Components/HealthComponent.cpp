@@ -32,6 +32,11 @@ namespace sw::engine
 		}
 	}
 
+	void HealthComponent::takeHeal(int spirit)
+	{
+		health += spirit;
+	}
+
 	bool HealthComponent::isAlive()
 	{
 		return health > 0;

@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine/Unit/Action/IAction.hpp>
 #include <string>
+#include <random>
 
 namespace sw::engine::utils
 {
@@ -16,5 +17,18 @@ namespace sw::engine::utils
 			case ActionType::UnknownAction: return "UnknownAction";
 			default: throw std::invalid_argument("Bad to string ActionType");
 		}
+	}
+
+	static std::mt19937& getGenerator()
+	{
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		return gen;
+	}
+
+	static size_t getRandom(size_t min, size_t max)
+	{
+		std::uniform_int_distribution<size_t> dist(min, max);
+		return dist(getGenerator());
 	}
 }

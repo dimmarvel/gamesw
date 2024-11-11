@@ -2,10 +2,12 @@
 
 #include "GameObserver.hpp"
 #include "Position.hpp"
+#include "Utils.hpp"
 
 #include <Engine/Unit/IUnit.hpp>
 #include <IO/System/PrintDebug.hpp>
 #include <cmath>
+#include <random>
 
 namespace sw::engine
 {
@@ -74,20 +76,16 @@ namespace sw::engine
 
 	void Map::moveUnit(std::shared_ptr<IUnit> unit, Position newPos)
 	{
-		auto cellUnit = getCellContent(unit->getPosition()).getUnit();
+		auto otherUnitInCell = getCellContent(newPos).getUnit();
 
-		if (!cellUnit)
-		{
-			throw std::runtime_error("Attempting to move a unit in a cell in which it does not exist");
-		}
-
-		if (cellUnit->getId() != unit->getId())
+		if (otherUnitInCell)
 		{
 			// TODO: should move to C++20 and use std::format :)
 			throw std::runtime_error(
 				std::string("Attempt to move unit with ID=") + std::to_string(unit->getId()) + " at position ("
-				+ std::to_string(unit->getPosition().getX()) + ", " + std::to_string(unit->getPosition().getY())
-				+ "), but cell is occupied by unit with ID=" + std::to_string(cellUnit->getId()));
+				+ std::to_string(unit->getPosition().getX()) + "," +  std::to_string(unit->getPosition().getY()) + ")" + 
+				", to position(" + std::to_string(newPos.getX()) + "," + std::to_string(newPos.getX()) + ") " +
+				", but cell is occupied by unit with ID=" + std::to_string(otherUnitInCell->getId()));
 		}
 
 		auto cell = getCellContent(unit->getPosition());
@@ -149,19 +147,28 @@ namespace sw::engine
 		return pos.getX() >= 0 && pos.getX() < getSizeX() && pos.getY() >= 0 && pos.getY() < getSizeY();
 	}
 
-	std::shared_ptr<IUnit> Map::findUnitInRange(
+	std::shared_ptr<IUnit> Map::findRandomUnitInRange(
 		std::shared_ptr<IUnit> unit, Map& map, uint32_t minRange, uint32_t maxRange)
 	{
+		std::vector<std::shared_ptr<IUnit>> validTargets;
+
 		for (const auto& potentialTarget : gameObserver->getUnits())
 		{
 			auto& potentialTargetUnit = potentialTarget.second;
 			if (potentialTargetUnit != unit
 				&& isWithinRange(unit->getPosition(), potentialTargetUnit->getPosition(), minRange, maxRange))
 			{
-				return potentialTargetUnit;
+				validTargets.push_back(potentialTargetUnit);
 			}
 		}
-		return nullptr;
+
+		if (validTargets.empty())
+		{
+			return nullptr;
+		}
+
+		size_t randomIndex = utils::getRandom(0, validTargets.size() - 1);
+		return validTargets[randomIndex];
 	}
 
 	bool Map::isWithinRange(const Position& from, const Position& to, int minRange, int maxRange)

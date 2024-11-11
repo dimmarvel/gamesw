@@ -89,6 +89,8 @@ namespace sw::engine
 		 */
 		void handleAction(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action);
 
+		bool handleHealing(std::shared_ptr<IUnit> unit, Map& map);
+
 		/**
 		 * @brief Attempts to execute an attack action for a unit.
 		 * @param unit The unit attempting the attack.
@@ -104,12 +106,12 @@ namespace sw::engine
 		 * @brief Attempts to execute a move action for a unit.
 		 * @param unit The unit attempting to move.
 		 * @param map The game map on which the move is executed.
-		 * @param moveAction The move action to execute.
+		 * @param action The move action to execute.
 		 * @return True if the move action was successful, false otherwise.
 		 * 
 		 * This function executes the move action. If the unit reaches its target position,
 		 * the action is removed from the unit's action queue.
 		 */
-		bool handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<MoveAction> moveAction);
+		bool handleMove(std::shared_ptr<IUnit> unit, Map& map, std::shared_ptr<IAction> action);
 	};
 }

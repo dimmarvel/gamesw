@@ -49,6 +49,15 @@ namespace sw::engine
 		void takeDamage(int damage);
 
 		/**
+		 * @brief Applies healing to the unit.
+		 * 
+		 * This method increase the unit's health by the specified spirit value.
+		 * 
+		 * @param spirit The amount of healing to apply to the unit's health.
+		 */
+		void takeHeal(int spirit);
+
+		/**
 		 * @brief Checks if the unit is still alive.
 		 * 
 		 * This method returns whether the unit has positive health (i.e., it is alive).

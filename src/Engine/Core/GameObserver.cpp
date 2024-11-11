@@ -10,6 +10,7 @@
 #include <Engine/Unit/UnitFactory.hpp>
 #include <IO/Commands/CreateMap.hpp>
 #include <IO/Commands/March.hpp>
+#include <IO/Commands/SpawnHeal.hpp>
 #include <IO/Commands/SpawnHunter.hpp>
 #include <IO/Commands/SpawnSwordsman.hpp>
 #include <IO/Events/UnitMoved.hpp>
@@ -65,7 +66,7 @@ namespace sw::engine
 				std::cout << "Game Is Over!" << std::endl;
 				break;
 			}
-			std::this_thread::sleep_for(std::chrono::seconds(1));  // Delay
+			std::this_thread::sleep_for(std::chrono::milliseconds(300)); // Delay
 		}
 	}
 
@@ -85,6 +86,17 @@ namespace sw::engine
 					addUnit(
 						UnitFactory::createSwordsman(
 							command.unitId, Position(command.x, command.y), command.hp, command.strength));
+					printDebug(std::cout, command);
+				})
+			.add<io::SpawnHeal>(
+				[this](auto command)
+				{
+					addUnit(
+						UnitFactory::createHeal(
+							command.unitId,
+							Position(command.x, command.y),
+							command.hp,
+							command.spirit));
 					printDebug(std::cout, command);
 				})
 			.add<io::SpawnHunter>(

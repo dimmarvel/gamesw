@@ -43,6 +43,8 @@ namespace sw::engine
 		 */
 		static std::shared_ptr<IAction> createRangeAttack(std::shared_ptr<IUnit> target, uint32_t damage);
 
+
+		static std::shared_ptr<IAction> createHeal(std::shared_ptr<IUnit> healer, Map& map, uint32_t spirit);
 		/**
 		 * @brief Creates an attack action for a unit based on its attack capabilities.
 		 * @param unit The unit attempting to perform an attack.

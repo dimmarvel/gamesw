@@ -3,6 +3,7 @@
 #include "MeleeAttackAction.hpp"
 #include "MoveAction.hpp"
 #include "RangeAttackAction.hpp"
+#include "HealAction.hpp"
 
 #include <Engine/Core/Map.hpp>
 #include <Engine/Core/Position.hpp>
@@ -11,6 +12,7 @@
 #include <Engine/Unit/Components/RangeAttackComponent.hpp>
 #include <Engine/Unit/Components/RangeComponent.hpp>
 #include <Engine/Unit/Components/StrengthComponent.hpp>
+#include <Engine/Unit/Components/RangeHealComponent.hpp>
 
 namespace sw::engine
 {
@@ -29,6 +31,20 @@ namespace sw::engine
 		return std::make_shared<RangeAttackAction>(target, damage);
 	}
 
+	std::shared_ptr<IAction> ActionFactory::createHeal(std::shared_ptr<IUnit> healer, Map& map, uint32_t spirit)
+	{
+		auto rangeHealComponent = healer->getComponent<RangeHealComponent>();
+		if (rangeHealComponent)
+		{
+			auto target = map.findRandomUnitInRange(healer, map, rangeHealComponent->getMinRange(), rangeHealComponent->getMaxRange());
+			if (target)
+			{
+				return std::make_shared<HealAction>(target, spirit);
+			}
+		}
+		return nullptr;
+	}
+
 	std::shared_ptr<IAction> ActionFactory::createAttack(std::shared_ptr<IUnit> unit, Map& map)
 	{
 		bool hasMeleeAttack = unit->getComponent<MeleeAttackComponent>() != nullptr;
@@ -42,10 +58,10 @@ namespace sw::engine
 			}
 		}
 
-		bool hasRangeAttack = unit->getComponent<RangeAttackComponent>() != nullptr;
-		if (hasRangeAttack)
+		auto rangeAttack = unit->getComponent<RangeAttackComponent>();
+		if (rangeAttack)
 		{
-			auto target = map.findUnitInRange(unit, map, 2, unit->getComponent<RangeComponent>()->getRange());
+			auto target = map.findRandomUnitInRange(unit, map, rangeAttack->getMinRange(), rangeAttack->getMaxRange());
 			if (target)
 			{
 				return std::make_shared<RangeAttackAction>(

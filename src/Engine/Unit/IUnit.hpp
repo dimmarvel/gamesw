@@ -16,6 +16,14 @@ namespace sw::engine
 	using unitId = uint32_t;
 	using unitPtrVec = std::vector<std::shared_ptr<IUnit>>;
 
+	enum class UnitType
+	{
+		Swordsman = 0,
+		Hunter,
+		Heal,
+		Unknown,
+	};
+
 	/**
 	 * @class IUnit
 	 * @brief Interface representing a game unit with components and a unique ID.
@@ -30,6 +38,7 @@ namespace sw::engine
 
 	private:
 		unitId _id;
+		UnitType unitType;
 		ComponentMap components;
 
 	public:
@@ -90,6 +99,16 @@ namespace sw::engine
 		inline void setId(unitId id) noexcept
 		{
 			_id = id;
+		}
+
+		inline void setType(UnitType t) noexcept
+		{
+			unitType = t;
+		}
+
+		inline UnitType getType() const noexcept
+		{
+			return unitType;
 		}
 
 		/**
